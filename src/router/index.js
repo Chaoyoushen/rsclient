@@ -49,7 +49,7 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: '待办事项',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '主页', icon: 'dashboard' }
     }]
@@ -63,14 +63,14 @@ export const constantRoutes = [
     meta: { title: '报表', icon: 'example' },
     children: [
       {
-        path: '/rep_form/wo_status_query',
+        path: 'wo_status_query',
         name: 'wo_status_query',
         component: () => import('@/views/wo_status_query/index'),
         meta: { title: '报修工单查询', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'test',
+        name: 'test',
         component: () => import('@/views/tree/index'),
         meta: { title: 'Tree', icon: 'tree' }
       }
@@ -78,27 +78,47 @@ export const constantRoutes = [
   },
 
   {
-    path: '/form',
+    path: '/manage',
     component: Layout,
     meta: { title: '管理', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
+        path: 'engineer_manager',
+        name: 'engineer_manager',
+        component: () => import('@/layout/components/MenuRouter'),
         meta: { title: '工程师管理', icon: 'form' },
         children: [
           {
-            path: 'table',
-            name: 'Table',
+            path: 'add_engineer',
+            name: 'add_engineer',
             component: () => import('@/views/table/index'),
             meta: { title: '新增工程师', icon: 'table' }
           },
           {
-            path: 'addWorker',
-            name: 'Tree',
+            path: 'edit_engineer',
+            name: 'edit_engineer',
             component: () => import('@/views/tree/index'),
-            meta: { title: '管理工程师', icon: 'table' }
+            meta: { title: '编辑工程师', icon: 'table' }
+          }
+        ]
+      },
+      {
+        path: 'integrated_management',
+        name: 'integrated_management',
+        component: () => import('@/layout/components/MenuRouter'),
+        meta: { title: '综合管理', icon: 'table' },
+        children: [
+          {
+            path: 'org_management',
+            name: 'org_management',
+            component: () => import('@/views/add_org/index'),
+            meta: { title: '机构管理', icon: 'table' }
+          },
+          {
+            path: 'machine_management',
+            name: 'machine_management',
+            component: () => import('@/views/tree/index'),
+            meta: { title: '设备管理', icon: 'table' }
           }
         ]
       },
