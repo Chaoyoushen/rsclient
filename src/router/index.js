@@ -117,7 +117,7 @@ export const constantRoutes = [
           {
             path: 'machine_management',
             name: 'machine_management',
-            component: () => import('@/views/tree/index'),
+            component: () => import('@/views/add_machine/index'),
             meta: { title: '设备管理', icon: 'table' }
           }
         ]

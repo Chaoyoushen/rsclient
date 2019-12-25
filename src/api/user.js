@@ -8,11 +8,9 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/user/getUserInfo',
-    method: 'get',
-    params: { token }
+    url: '/user/getUserInfo'
   })
 }
 
@@ -20,5 +18,21 @@ export function logout() {
   return request({
     url: '/user/logout',
     method: 'post'
+  })
+}
+
+export function batchImportOrg(data) {
+  return request({
+    url: '/org/batchAdd',
+    method: 'post',
+    data
+  })
+}
+
+export function batchImportMachine(data) {
+  return request({
+    url: '/machine/batchAdd',
+    method: 'post',
+    data
   })
 }

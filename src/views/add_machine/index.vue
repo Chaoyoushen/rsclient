@@ -23,8 +23,9 @@
     <el-main>
       <!--展示导入信息-->
       <el-table :data="excelData" tooltip-effect="dark" width="60%">
-        <el-table-column label="机构名称" prop="orgName" show-overflow-tooltip />
-        <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
+        <el-table-column label="设备名称或分类" prop="machineName" show-overflow-tooltip />
+        <el-table-column label="设备编号" prop="machineId" show-overflow-tooltip />
+        <el-table-column label="设备上属编号" prop="parentId" show-overflow-tooltip />
       </el-table>
     </el-main>
   </el-container>
@@ -51,7 +52,7 @@ export default {
   },
   methods: {
     open() {
-      this.$message('机构导入成功')
+      this.$message('设备导入成功')
     },
     downloadFile(rs, name) { // 点击导出按钮
       let data = [{}]
