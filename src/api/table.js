@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export function getOrderList(data) {
   return request({
     url: '/table/list',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
