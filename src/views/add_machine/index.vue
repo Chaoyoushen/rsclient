@@ -1,16 +1,6 @@
 <template>
   <el-container>
-    <el-header>
-      <div v-loading.fullscreen.lock="fullscreenLoading" class="index" element-loading-text="拼命加载中...">
-        <input
-          id="imFile"
-          type="file"
-          style="display: none"
-          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-          @change="importFile(this)"
-        >
-      </div>
-      <a id="link" />
+    <el-header style="text-align: right; font-size: 12px; margin-top: 12px">
       <el-button class="button" @click="uploadFile()">导入</el-button>
       <el-button class="button" @click="batchAddOrg(excelData)">上传</el-button>
       <!--错误信息提示-->
@@ -131,16 +121,4 @@ export default {
 </script>
 
 <style>
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-  .el-main {
-    background-color: #fff;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
 </style>

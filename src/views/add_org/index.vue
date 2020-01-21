@@ -1,33 +1,27 @@
 <template>
-  <el-container>
-    <el-header>
-      <div v-loading.fullscreen.lock="fullscreenLoading" class="index" element-loading-text="拼命加载中...">
-        <input
-          id="imFile"
-          type="file"
-          style="display: none"
-          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-          @change="importFile(this)"
-        >
-      </div>
-      <a id="link" />
-      <el-button class="button" @click="uploadFile()">导入</el-button>
-      <el-button class="button" @click="batchAddOrg(excelData)">上传</el-button>
-      <!--错误信息提示-->
-      <el-dialog v-model="errorDialog" title="提示">
-        <span>{{ errorMsg }}</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="errorDialog=false">确认</el-button>
-        </span>
-      </el-dialog></el-header>
-    <el-main>
-      <!--展示导入信息-->
-      <el-table :data="excelData" tooltip-effect="dark" width="60%">
-        <el-table-column label="机构名称" prop="orgName" show-overflow-tooltip />
-        <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
-      </el-table>
-    </el-main>
-  </el-container>
+  <div>
+    <el-container>
+      <el-header style="text-align: right; font-size: 12px">
+        <div style="margin-top: 12px">
+          <el-button class="button" @click="uploadFile()">导入</el-button>
+          <el-button class="button" @click="batchAddOrg(excelData)">上传</el-button>
+        </div>
+      </el-header>
+      <el-main style="text-align: center">
+        <!--展示导入信息-->
+        <el-table :data="excelData" tooltip-effect="dark" width="60%">
+          <el-table-column label="机构名称" prop="orgName" show-overflow-tooltip />
+          <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
+        </el-table>
+      </el-main>
+    </el-container>
+    <el-dialog v-model="errorDialog" title="提示">
+      <span>{{ errorMsg }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="errorDialog=false">确认</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -130,16 +124,5 @@ export default {
 </script>
 
 <style>
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-  .el-main {
-    background-color: #fff;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
+
 </style>

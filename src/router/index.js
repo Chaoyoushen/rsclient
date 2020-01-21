@@ -65,8 +65,8 @@ export const constantRoutes = [
       {
         path: 'wo_status_query',
         name: 'wo_status_query',
-        component: () => import('@/views/wo_status_query/index'),
-        meta: { title: '报修工单查询', icon: 'table' }
+        component: () => import('@/views/tree/index'),
+        meta: { title: '报修工单', icon: 'table' }
       },
       {
         path: 'test',
@@ -91,7 +91,7 @@ export const constantRoutes = [
           {
             path: 'add_engineer',
             name: 'add_engineer',
-            component: () => import('@/views/table/index'),
+            component: () => import('@/views/tree/index'),
             meta: { title: '新增工程师', icon: 'table' }
           },
           {
@@ -125,7 +125,7 @@ export const constantRoutes = [
       {
         path: 'table',
         name: 'Table',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/wo_list/index'),
         meta: { title: '报修工单查询', icon: 'table' }
       },
       {

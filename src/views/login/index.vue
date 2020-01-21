@@ -3,7 +3,8 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">BNLD报修系统</h3>
+        <!--<h3 class="title">BNLD报修系统</h3>-->
+        <h3 class="title">小钟的个人空间</h3>
       </div>
 
       <el-form-item prop="username">
@@ -13,7 +14,7 @@
         <el-input
           ref="workNo"
           v-model="loginForm.workNo"
-          placeholder="工号"
+          placeholder="账号"
           name="workNo"
           type="text"
           tabindex="1"
@@ -69,8 +70,8 @@ export default {
     }
     return {
       loginForm: {
-        workNo: '05360',
-        password: '123456'
+        workNo: '',
+        password: ''
       },
       loginRules: {
         workNo: [{ required: true, trigger: 'blur', validator: validateUsername }],
