@@ -14,3 +14,19 @@ export function initWOList() {
     method: 'post'
   })
 }
+
+export function manageWO(data) {
+  return request({
+    url: '/admin/manageWO',
+    method: 'post',
+    data
+  })
+}
+
+export function getWOInfo(data) {
+  return request({
+    url: '/wo/getWOInfo',
+    method: 'post',
+    data
+  })
+}
