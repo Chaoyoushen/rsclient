@@ -86,19 +86,19 @@ export const constantRoutes = [
         path: 'engineer_manager',
         name: 'engineer_manager',
         component: () => import('@/layout/components/MenuRouter'),
-        meta: { title: '工程师管理', icon: 'form' },
+        meta: { title: '用户管理', icon: 'form' },
         children: [
           {
             path: 'add_engineer',
             name: 'add_engineer',
-            component: () => import('@/views/tree/index'),
-            meta: { title: '新增工程师', icon: 'table' }
+            component: () => import('@/views/worker/index'),
+            meta: { title: '工程师管理', icon: 'table' }
           },
           {
             path: 'edit_engineer',
             name: 'edit_engineer',
-            component: () => import('@/views/tree/index'),
-            meta: { title: '编辑工程师', icon: 'table' }
+            component: () => import('@/views/user/index'),
+            meta: { title: '用户管理', icon: 'table' }
           }
         ]
       },
@@ -127,12 +127,6 @@ export const constantRoutes = [
         name: 'Table',
         component: () => import('@/views/wo_list/index'),
         meta: { title: '报修工单查询', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
       }
     ]
   },

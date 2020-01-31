@@ -15,6 +15,20 @@ export function initWOList() {
   })
 }
 
+export function queryOrgs() {
+  return request({
+    url: '/admin/queryOrgs',
+    method: 'post'
+  })
+}
+
+export function queryMachines() {
+  return request({
+    url: '/admin/queryMachines',
+    method: 'post'
+  })
+}
+
 export function manageWO(data) {
   return request({
     url: '/admin/manageWO',
