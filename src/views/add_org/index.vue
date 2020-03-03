@@ -20,8 +20,8 @@
       <el-main style="text-align: center">
         <!--展示导入信息-->
         <el-table v-loading="loading" :data="excelData" tooltip-effect="dark">
-          <el-table-column label="机构名称" prop="orgName" show-overflow-tooltip />
-          <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
+          <el-table-column label="机构名称" prop="orgId" show-overflow-tooltip />
+          <el-table-column label="机构编号" prop="orgName" show-overflow-tooltip />
         </el-table>
       </el-main>
     </el-container>

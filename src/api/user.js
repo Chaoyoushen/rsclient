@@ -36,3 +36,10 @@ export function batchImportMachine(data) {
     data
   })
 }
+export function batchImportUser(data) {
+  return request({
+    url: '/user/batchAdd',
+    method: 'post',
+    data
+  })
+}
