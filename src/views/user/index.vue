@@ -20,7 +20,6 @@
       <el-main style="text-align: center">
         <!--展示导入信息-->
         <el-table v-loading="loading" :data="excelData" tooltip-effect="dark">
-          <el-table-column label="用户编号" prop="personId" show-overflow-tooltip />
           <el-table-column label="用户名称" prop="personName" show-overflow-tooltip />
           <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
           <el-table-column label="用户类型" prop="role" show-overflow-tooltip />
@@ -109,7 +108,7 @@ export default {
       loading: false,
       detailVisible: false,
       deleteVisible: false,
-      types: [{ 'label': '用户', 'value': '0' }, { 'label': '工程师', 'value': '1' }],
+      types: [{ 'label': '用户', 'value': '用户' }, { 'label': '工程师', 'value': '工程师' }],
       detailForm: {
         personId: '',
         orgId: '',
