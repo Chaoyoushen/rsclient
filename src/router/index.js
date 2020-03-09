@@ -89,12 +89,6 @@ export const constantRoutes = [
         meta: { title: '用户管理', icon: 'form' },
         children: [
           {
-            path: 'add_engineer',
-            name: 'add_engineer',
-            component: () => import('@/views/worker/index'),
-            meta: { title: '工程师管理', icon: 'table' }
-          },
-          {
             path: 'edit_engineer',
             name: 'edit_engineer',
             component: () => import('@/views/user/index'),

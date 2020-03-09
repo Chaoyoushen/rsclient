@@ -1,7 +1,6 @@
 module.exports = {
 
-  // title: 'BNLD报修系统',
-  title: '小钟的个人空间',
+  title: 'BNLD报修系统',
   /**
    * @type {boolean} true | false
    * @description Whether fix the header

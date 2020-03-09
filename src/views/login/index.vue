@@ -3,8 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <!--<h3 class="title">BNLD报修系统</h3>-->
-        <h3 class="title">小钟的个人空间</h3>
+        <h3 class="title">BNLD报修系统</h3>
       </div>
 
       <el-form-item prop="username">

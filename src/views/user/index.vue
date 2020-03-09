@@ -68,7 +68,7 @@
             <el-input v-model="detailForm.orgId" style="width: 250px" />
           </el-form-item>
           <el-form-item label="工号">
-            <el-input v-model="detailForm.workNo" style="width: 350px" />
+            <el-input v-model="detailForm.workNo" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
