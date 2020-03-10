@@ -20,6 +20,50 @@ export function logout() {
     method: 'post'
   })
 }
+export function queryUser() {
+  return request({
+    url: '/admin/queryUser',
+    method: 'post'
+  })
+}
+export function initUsermanage() {
+  return request({
+    url: '/user/initUsermanage',
+    method: 'post'
+  })
+}
+
+export function addUser(data) {
+  return request({
+    url: '/user/addUser',
+    method: 'post',
+    data
+  })
+}
+
+export function manageUser(data) {
+  return request({
+    url: '/user/manageUser',
+    method: 'post',
+    data
+  })
+}
+
+export function ChangePass(data) {
+  return request({
+    url: '/user/changeUserpassword',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteUser(data) {
+  return request({
+    url: '/user/deleteUser',
+    method: 'post',
+    data
+  })
+}
 
 export function batchImportOrg(data) {
   return request({
@@ -36,6 +80,7 @@ export function batchImportMachine(data) {
     data
   })
 }
+
 export function batchImportUser(data) {
   return request({
     url: '/user/batchAdd',

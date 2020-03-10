@@ -12,9 +12,10 @@
           >
           <a id="downlink" />
           <el-button class="button" @click="queryUser()">查询</el-button>
+          <el-button class="button" @click="openAddInfo()">增加</el-button>
           <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
           <el-button class="button" @click="uploadFile()">导入</el-button>
-          <el-button class="button" @click="batchAddOrg(excelData)">上传</el-button>
+          <el-button class="button" @click="batchAddUser(excelData)">上传</el-button>
         </div>
       </el-header>
       <el-main style="text-align: center">
@@ -30,6 +31,11 @@
                 size="mini"
                 @click="openChangeInfo(scope)"
               >编辑</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="openPassInfo(scope)"
+              >改密</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -58,14 +64,18 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="用户编号">
-            <el-input v-model="detailForm.personId" style="width: 250px" />
-          </el-form-item>
           <el-form-item label="用户名称">
             <el-input v-model="detailForm.personName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="机构编号">
-            <el-input v-model="detailForm.orgId" style="width: 250px" />
+          <el-form-item label="网点">
+            <el-select v-model="detailForm.orgId" placeholder="请选择" filterable>
+              <el-option
+                v-for="item in brs"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </el-form-item>
           <el-form-item label="工号">
             <el-input v-model="detailForm.workNo" style="width: 250px" />
@@ -77,10 +87,65 @@
         </div>
       </span>
     </el-dialog>
-    <el-dialog v-loading="closeOrderLoading" title="删除" :visible.sync="deleteVisible" center>
+    <el-dialog
+      title="用户详情"
+      :visible.sync="addVisible"
+      width="60%"
+      center
+    >
+      <span>
+        <el-form :model="addForm" label-width="80px">
+          <el-form-item label="用户类别">
+            <el-select v-model="addForm.role" placeholder="请选择">
+              <el-option
+                v-for="item in types"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="用户名称">
+            <el-input v-model="addForm.personName" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="网点">
+            <el-select v-model="addForm.orgId" placeholder="请选择" filterable>
+              <el-option
+                v-for="item in brs"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="工号">
+            <el-input v-model="addForm.workNo" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="addForm.password" style="width: 250px" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleAdd">确 定</el-button>
+        </div>
+      </span>
+    </el-dialog>
+    <el-dialog v-loading="loading" title="删除" :visible.sync="deleteVisible" center>
       <div slot="footer" class="dialog-footer">
         <el-button @click="deleteVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleDelete()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog v-loading="loading" title="改密" :visible.sync="changeVisible" center>
+      <el-form :model="changeForm">
+        <el-form-item label="新密码">
+          <el-input v-model="changeForm.password" style="width: 60%" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="changeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handlePass">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog v-model="errorDialog" title="提示">
@@ -93,7 +158,7 @@
 </template>
 
 <script>
-import { queryUser, manageUser, deleteUser } from '@/api/admin'
+import { initUsermanage, queryUser, manageUser, deleteUser, ChangePass, addUser } from '@/api/user'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -107,8 +172,19 @@ export default {
       excelData: [],
       loading: false,
       detailVisible: false,
+      changeVisible: false,
       deleteVisible: false,
+      addVisible: false,
       types: [{ 'label': '用户', 'value': '用户' }, { 'label': '工程师', 'value': '工程师' }],
+      brs: [],
+      addForm: {
+        password: '',
+        personId: '',
+        orgId: '',
+        personName: '',
+        workNo: '',
+        role: ''
+      },
       detailForm: {
         personId: '',
         orgId: '',
@@ -118,12 +194,24 @@ export default {
       },
       deleteForm: {
         personId: ''
+      },
+      changeForm: {
+        personId: '',
+        password: '',
+        role: '',
+        orgId: ''
       }
     }
   },
   mounted() {
     this.imFile = document.getElementById('imFile')
     this.outFile = document.getElementById('downlink')
+  },
+  created: function() {
+    initUsermanage().then(res => {
+      console.log(res)
+      this.brs = res.data.brs
+    })
   },
   methods: {
     open() {
@@ -184,7 +272,7 @@ export default {
         this.excelData = data
       }
     },
-    batchAddOrg(excelData) {
+    batchAddUser(excelData) {
       if (excelData.length <= 0) {
         this.errorDialog = true
         this.errorMsg = '请导入正确信息'
@@ -267,6 +355,33 @@ export default {
       }
       return s
     },
+    openAddInfo() {
+      this.addForm.personId = ''
+      this.addForm.personName = ''
+      this.addForm.workNo = ''
+      this.addForm.orgId = ''
+      this.addForm.role = ''
+      this.addForm.password = ''
+      this.addVisible = true
+    },
+    handleAdd() {
+      addUser(this.addForm).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: '成功'
+          })
+        } else {
+          this.$message({
+            type: 'fail',
+            message: res.message
+          })
+        }
+        this.addVisible = false
+        this.queryUser()
+      })
+    },
     openChangeInfo(scope) {
       this.detailForm.personId = scope.row.personId
       this.detailForm.personName = scope.row.personName
@@ -290,6 +405,31 @@ export default {
           })
         }
         this.detailVisible = false
+        this.queryUser()
+      })
+    },
+    openPassInfo(scope) {
+      this.changeForm.personId = scope.row.personId
+      this.changeForm.orgId = scope.row.orgId
+      this.changeForm.role = scope.row.role
+      this.changeForm.password = ''
+      this.changeVisible = true
+    },
+    handlePass() {
+      ChangePass(this.changeForm).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: '成功'
+          })
+        } else {
+          this.$message({
+            type: 'fail',
+            message: res.message
+          })
+        }
+        this.changeVisible = false
         this.queryUser()
       })
     },

@@ -21,7 +21,7 @@
               <el-option
                 v-for="item in brs"
                 :key="item.value"
-                :label="item.label"
+                :label="item.value"
                 :value="item.value"
               />
             </el-select>

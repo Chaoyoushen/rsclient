@@ -21,12 +21,7 @@ export function queryOrgs() {
     method: 'post'
   })
 }
-export function queryUser() {
-  return request({
-    url: '/admin/queryUser',
-    method: 'post'
-  })
-}
+
 export function queryMachines() {
   return request({
     url: '/admin/queryMachines',
@@ -42,20 +37,6 @@ export function manageWO(data) {
   })
 }
 
-export function manageUser(data) {
-  return request({
-    url: '/user/manageUser',
-    method: 'post',
-    data
-  })
-}
-export function deleteUser(data) {
-  return request({
-    url: '/user/deleteUser',
-    method: 'post',
-    data
-  })
-}
 export function getWOInfo(data) {
   return request({
     url: '/wo/getWOInfo',
