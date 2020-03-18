@@ -296,7 +296,7 @@ export default {
         this.detailForm.machine = res.data.machine
         this.detailForm.phone = res.data.phone
         this.detailForm.desc = res.data.description
-        const tmp = res.data.images.split(',')
+        const tmp = res.data.images.split(';')
         if (tmp[0] !== '') {
           const urls = []
           for (const index in tmp) {
