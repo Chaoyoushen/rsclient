@@ -20,10 +20,11 @@ export function logout() {
     method: 'post'
   })
 }
-export function queryUser() {
+export function queryUser(data) {
   return request({
     url: '/admin/queryUser',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 export function initUsermanage() {
@@ -60,6 +61,14 @@ export function ChangePass(data) {
 export function deleteUser(data) {
   return request({
     url: '/user/deleteUser',
+    method: 'post',
+    data
+  })
+}
+
+export function batchDelete(data) {
+  return request({
+    url: '/user/batchDelete',
     method: 'post',
     data
   })

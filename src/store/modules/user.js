@@ -35,7 +35,6 @@ const actions = {
       })
     })
   },
-
   batchAddOrg({ commit }, list) {
     return new Promise((resolve, reject) => {
       batchImportOrg({ list: list }).then(response => {

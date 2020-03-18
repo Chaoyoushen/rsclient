@@ -11,16 +11,52 @@
             @change="importFile(this)"
           >
           <a id="downlink" />
-          <el-button class="button" @click="queryUser()">查询</el-button>
+          <el-form :inline="true" :model="condition" style="margin-top: 12px">
+            <el-form-item label="用户名" style="text-align: center">
+              <el-input v-model="condition.personName" placeholder="联系人" />
+            </el-form-item>
+            <el-form-item label="网点">
+              <el-select v-model="condition.orgId" clearable placeholder="请选择" filterable>
+                <el-option
+                  v-for="item in brs"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="queryUser()">查询</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="openAddInfo()">增加</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="removeBatch()">删除</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="downloadFile(excelData)">导出</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="uploadFile()">导入</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="batchAddUser(excelData)">上传</el-button>
+            </el-form-item>
+<!--
+            <el-button class="button" @click="">查询</el-button>
           <el-button class="button" @click="openAddInfo()">增加</el-button>
+          <el-button class="button" @click="removeBatch()">删除</el-button>
           <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
           <el-button class="button" @click="uploadFile()">导入</el-button>
-          <el-button class="button" @click="batchAddUser(excelData)">上传</el-button>
+          <el-button class="button" @click="batchAddUser(excelData)">上传</el-button>-->
+          </el-form>
         </div>
       </el-header>
       <el-main style="text-align: center">
         <!--展示导入信息-->
-        <el-table v-loading="loading" :data="excelData" tooltip-effect="dark">
+        <el-table ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :data="excelData" tooltip-effect="dark">
+          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="用户名称" prop="personName" show-overflow-tooltip />
           <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
           <el-table-column label="用户类型" prop="role" show-overflow-tooltip />
@@ -158,7 +194,7 @@
 </template>
 
 <script>
-import { initUsermanage, queryUser, manageUser, deleteUser, ChangePass, addUser } from '@/api/user'
+import { initUsermanage, queryUser, manageUser, deleteUser, ChangePass, addUser, batchDelete } from '@/api/user'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -170,6 +206,8 @@ export default {
       errorDialog: false, // 错误信息弹窗
       errorMsg: '', // 错误信息内容
       excelData: [],
+      multipleSelection: [],
+      personIds: '',
       loading: false,
       detailVisible: false,
       changeVisible: false,
@@ -177,6 +215,10 @@ export default {
       addVisible: false,
       types: [{ 'label': '用户', 'value': '用户' }, { 'label': '工程师', 'value': '工程师' }],
       brs: [],
+      condition: {
+        personName: '',
+        orgId: ''
+      },
       addForm: {
         password: '',
         personId: '',
@@ -291,11 +333,36 @@ export default {
     },
     queryUser() {
       this.loading = true
-      queryUser().then(res => {
+      const data = {
+        orgId: this.condition.orgId,
+        personName: this.condition.personName
+      }
+      console.log(data)
+      queryUser(data).then(res => {
         console.log(res)
         this.excelData = res.data
         this.loading = false
       })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    removeBatch() {
+      const length = this.multipleSelection.length
+      for (let i = 0; i < length; i++) {
+        this.personIds += this.multipleSelection[i].personId + ' '
+      }
+      batchDelete(this.personIds).then(res => {
+        console.log(res)
+        this.$message('删除成功')
+        this.queryUser()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+      this.personIds = ''
     },
     downloadExl(json, downName, type) { // 导出到excel
       const keyMap = [] // 获取键
