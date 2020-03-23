@@ -25,6 +25,16 @@
                 />
               </el-select>
             </el-form-item>
+            <el-form-item label="用户类型">
+              <el-select v-model="condition.role" clearable placeholder="请选择" filterable>
+                <el-option
+                  v-for="item in querytypes"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="queryUser()">查询</el-button>
             </el-form-item>
@@ -213,11 +223,13 @@ export default {
       changeVisible: false,
       deleteVisible: false,
       addVisible: false,
-      types: [{ 'label': '用户', 'value': '用户' }, { 'label': '工程师', 'value': '工程师' }],
+      types: [{ 'label': '用户', 'value': '用户' }, { 'label': '内场工程师', 'value': '内场工程师' }, { 'label': '管理员', 'value': '管理员' }, { 'label': '外场工程师', 'value': '外场工程师' }, { 'label': '机构', 'value': '机构' }],
+      querytypes: [{ 'label': '用户', 'value': '0' }, { 'label': '内场工程师', 'value': '1' }, { 'label': '管理员', 'value': '2' }, { 'label': '外场工程师', 'value': '3' }, { 'label': '机构', 'value': '4' }],
       brs: [],
       condition: {
         personName: '',
-        orgId: ''
+        orgId: '',
+        role: ''
       },
       addForm: {
         password: '',
@@ -335,7 +347,8 @@ export default {
       this.loading = true
       const data = {
         orgId: this.condition.orgId,
-        personName: this.condition.personName
+        personName: this.condition.personName,
+        role: this.condition.role
       }
       console.log(data)
       queryUser(data).then(res => {
