@@ -1,4 +1,4 @@
-import { login, logout, getInfo, batchImportOrg, batchImportMachine, batchImportUser } from '@/api/user'
+import { login, logout, getInfo, batchImportOrg, batchImportMachine, batchImportUser, batchImportFault, batchImportDescription } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -61,6 +61,28 @@ const actions = {
   batchAddUser({ commit }, list) {
     return new Promise((resolve, reject) => {
       batchImportUser({ list: list }).then(response => {
+        const { data } = response
+        console.log(data)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  batchAddFault({ commit }, list) {
+    return new Promise((resolve, reject) => {
+      batchImportFault({ list: list }).then(response => {
+        const { data } = response
+        console.log(data)
+      }).catch(error => {
+        reject(error)
+        resolve()
+      })
+    })
+  },
+  batchAddDescription({ commit }, list) {
+    return new Promise((resolve, reject) => {
+      batchImportDescription({ list: list }).then(response => {
         const { data } = response
         console.log(data)
         resolve()

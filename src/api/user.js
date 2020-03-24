@@ -97,3 +97,19 @@ export function batchImportUser(data) {
     data
   })
 }
+
+export function batchImportFault(data) {
+  return request({
+    url: '/fault/batchAdd',
+    method: 'post',
+    data
+  })
+}
+
+export function batchImportDescription(data) {
+  return request({
+    url: '/description/batchAdd',
+    method: 'post',
+    data
+  })
+}

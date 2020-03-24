@@ -103,16 +103,22 @@ export const constantRoutes = [
         meta: { title: '综合管理', icon: 'table' },
         children: [
           {
-            path: 'org_management',
-            name: 'org_management',
+            path: 'area_management',
+            name: 'area_management',
             component: () => import('@/views/add_org/index'),
-            meta: { title: '机构管理', icon: 'table' }
+            meta: { title: '区域管理', icon: 'table' }
           },
           {
             path: 'machine_management',
             name: 'machine_management',
             component: () => import('@/views/add_machine/index'),
             meta: { title: '设备管理', icon: 'table' }
+          },
+          {
+            path: 'description_management',
+            name: 'description_management',
+            component: () => import('@/views/add_description/index'),
+            meta: { title: '描述管理', icon: 'table' }
           }
         ]
       },

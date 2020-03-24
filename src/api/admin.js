@@ -23,10 +23,27 @@ export function queryOrgs() {
   })
 }
 
-export function queryMachines() {
+export function queryMachines(data) {
   return request({
     url: '/admin/queryMachines',
-    method: 'post'
+    method: 'post',
+    data
+  })
+}
+
+export function queryFault(data) {
+  return request({
+    url: '/admin/queryFault',
+    method: 'post',
+    data
+  })
+}
+
+export function queryDescription(data) {
+  return request({
+    url: '/admin/queryDescription',
+    method: 'post',
+    data
   })
 }
 

@@ -15,12 +15,12 @@
             <el-form-item label="用户名" style="text-align: center">
               <el-input v-model="condition.personName" placeholder="联系人" />
             </el-form-item>
-            <el-form-item label="网点">
+            <el-form-item label="机构编号">
               <el-select v-model="condition.orgId" clearable placeholder="请选择" filterable>
                 <el-option
                   v-for="item in brs"
                   :key="item.value"
-                  :label="item.label"
+                  :label="item.value"
                   :value="item.value"
                 />
               </el-select>
@@ -53,13 +53,6 @@
             <el-form-item>
               <el-button type="primary" @click="batchAddUser(excelData)">上传</el-button>
             </el-form-item>
-<!--
-            <el-button class="button" @click="">查询</el-button>
-          <el-button class="button" @click="openAddInfo()">增加</el-button>
-          <el-button class="button" @click="removeBatch()">删除</el-button>
-          <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
-          <el-button class="button" @click="uploadFile()">导入</el-button>
-          <el-button class="button" @click="batchAddUser(excelData)">上传</el-button>-->
           </el-form>
         </div>
       </el-header>
@@ -113,12 +106,12 @@
           <el-form-item label="用户名称">
             <el-input v-model="detailForm.personName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="网点">
+          <el-form-item label="机构编号">
             <el-select v-model="detailForm.orgId" placeholder="请选择" filterable>
               <el-option
                 v-for="item in brs"
                 :key="item.value"
-                :label="item.label"
+                :label="item.value"
                 :value="item.value"
               />
             </el-select>
@@ -154,12 +147,12 @@
           <el-form-item label="用户名称">
             <el-input v-model="addForm.personName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="网点">
+          <el-form-item label="机构编号">
             <el-select v-model="addForm.orgId" placeholder="请选择" filterable>
               <el-option
                 v-for="item in brs"
                 :key="item.value"
-                :label="item.label"
+                :label="item.value"
                 :value="item.value"
               />
             </el-select>
