@@ -1,49 +1,62 @@
 <template>
   <div>
     <el-container>
-      <el-header style="text-align: right; font-size: 12px; margin-top: 12px">
-        <input
-          id="imFile"
-          type="file"
-          style="display: none"
-          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-          @change="importFile(this)"
-        >
-        <a id="downlink" />
-        <el-form :inline="true" :model="condition" style="margin-top: 12px">
-          <el-form-item label="区域名" style="text-align: center">
-            <el-input v-model="condition.faultName" placeholder="" />
-          </el-form-item>
-          <el-form-item label="区域编号" style="text-align: center">
-            <el-input v-model="condition.faultId" placeholder="" />
-          </el-form-item>
-          <el-button class="button" @click="queryFault()">查询</el-button>
-          <el-button class="button" @click="openAddInfo()">增加</el-button>
-          <el-button class="button" @click="removeBatch()">删除</el-button>
-          <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
-          <el-button class="button" @click="uploadFile()">导入</el-button>
-          <el-button class="button" @click="batchAddFault(excelData)">上传</el-button>
-          <!--错误信息提示-->
-          <el-dialog v-model="errorDialog" title="提示">
-            <span>{{ errorMsg }}</span>
-            <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="errorDialog=false">确认</el-button>
-            </span>
-          </el-dialog>
-        </el-form>
+      <el-header style="text-align: right; font-size: 12px">
+        <div style="margin-top: 12px">
+          <input
+            id="imFile"
+            type="file"
+            style="display: none"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            @change="importFile(this)"
+          >
+          <a id="downlink" />
+          <el-form :inline="true" :model="condition" style="margin-top: 12px">
+            <el-form-item label="用户名" style="text-align: center">
+              <el-input v-model="condition.orgName" placeholder="联系人" />
+            </el-form-item>
+            <el-form-item label="机构编号">
+              <el-input v-model="condition.orgId" placeholder="请选择" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="queryOrg()">查询</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="openAddInfo()">增加</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="removeBatch()">删除</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="downloadFile(excelData)">导出</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="uploadFile()">导入</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="batchAddOrg(excelData)">上传</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </el-header>
-      <el-main>
+      <el-main style="text-align: center">
         <!--展示导入信息-->
-        <el-table ref="multipleTable" v-loading="loading" :data="excelData" tooltip-effect="dark" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" />
-          <el-table-column label="区域名" prop="faultName" show-overflow-tooltip />
-          <el-table-column label="区域编号" prop="faultId" show-overflow-tooltip />
+        <el-table ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :data="excelData" tooltip-effect="dark">
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column label="用户名称" prop="orgName" show-overflow-tooltip />
+          <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
+          <el-table-column label="工号" prop="workNo" show-overflow-tooltip />
           <el-table-column label="操作" fixed="right" header-align="center" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 @click="openChangeInfo(scope)"
               >编辑</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="openPassInfo(scope)"
+              >改密</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -62,11 +75,14 @@
     >
       <span>
         <el-form :model="detailForm" label-width="80px">
-          <el-form-item label="区域名">
-            <el-input v-model="detailForm.faultName" style="width: 250px" />
+          <el-form-item label="用户名称">
+            <el-input v-model="detailForm.orgName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="区域编号">
-            <el-input v-model="detailForm.faultId" style="width: 250px" />
+          <el-form-item label="机构编号">
+            <el-input v-model="detailForm.orgId" placeholder="请选择" />
+          </el-form-item>
+          <el-form-item label="工号">
+            <el-input v-model="detailForm.workNo" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -76,18 +92,24 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="详情"
+      title="用户详情"
       :visible.sync="addVisible"
       width="60%"
       center
     >
       <span>
         <el-form :model="addForm" label-width="80px">
-          <el-form-item label="区域名">
-            <el-input v-model="addForm.faultName" style="width: 250px" />
+          <el-form-item label="用户名称">
+            <el-input v-model="addForm.orgName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="区域编号">
-            <el-input v-model="addForm.faultId" style="width: 250px" />
+          <el-form-item label="机构编号">
+            <el-input v-model="addForm.orgId" placeholder="请选择" filterable/>
+          </el-form-item>
+          <el-form-item label="工号">
+            <el-input v-model="addForm.workNo" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="addForm.password" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -102,13 +124,28 @@
         <el-button type="primary" @click="handleDelete()">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog v-loading="loading" title="改密" :visible.sync="changeVisible" center>
+      <el-form :model="changeForm">
+        <el-form-item label="新密码">
+          <el-input v-model="changeForm.password" style="width: 60%" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="changeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handlePass">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog v-model="errorDialog" title="提示">
+      <span>{{ errorMsg }}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="errorDialog=false">确认</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import '@/utils/excel'
-import { queryFault } from '@/api/admin'
-import { manageFault, batchDelete, addFault, deleteFault } from '@/api/fault'
+import { queryOrg, manageOrg, deleteOrg, ChangePass, addOrg, batchDelete } from '@/api/org'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -121,27 +158,40 @@ export default {
       errorMsg: '', // 错误信息内容
       excelData: [],
       multipleSelection: [],
-      repeatdata: [],
+      personIds: '',
       loading: false,
-      faultIds: '',
       detailVisible: false,
+      changeVisible: false,
       deleteVisible: false,
       addVisible: false,
-      detailForm: {
-        faultId: '',
-        faultName: '',
-        pastId: ''
+      brs: [],
+      condition: {
+        orgName: '',
+        orgId: '',
+        role: ''
       },
       addForm: {
-        faultId: '',
-        faultName: ''
+        password: '',
+        personId: '',
+        orgId: '',
+        orgName: '',
+        workNo: ''
+      },
+      detailForm: {
+        password: '',
+        personId: '',
+        orgId: '',
+        orgName: '',
+        workNo: ''
       },
       deleteForm: {
-        faultId: ''
+        personId: ''
       },
-      condition: {
-        faultId: '',
-        faultName: ''
+      changeForm: {
+        personId: '',
+        password: '',
+        role: '',
+        orgId: ''
       }
     }
   },
@@ -153,26 +203,13 @@ export default {
     open() {
       this.$message('导入成功')
     },
-    queryFault() {
-      this.loading = true
-      const data = {
-        faultId: this.condition.faultId,
-        faultName: this.condition.faultName
-      }
-      console.log(data)
-      queryFault(data).then(res => {
-        console.log(res)
-        this.excelData = res.data
-        this.loading = false
-      })
-    },
-    downloadFile(rs, name) { // 点击导出按钮
+    downloadFile: function(rs) { // 按钮导出
       let data = [{}]
       for (const k in rs[0]) {
         data[0][k] = k
       }
       data = data.concat(rs)
-      this.downloadExl(data, '设备列表')
+      this.downloadExl(data, '机构列表')
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()
@@ -221,14 +258,14 @@ export default {
         this.excelData = data
       }
     },
-    batchAddFault(excelData) {
+    batchAddOrg(excelData) {
       if (excelData.length <= 0) {
         this.errorDialog = true
         this.errorMsg = '请导入正确信息'
       } else {
         this.fullscreenLoading = true
         console.log(JSON.stringify(excelData))
-        this.$store.dispatch('user/batchAddFault', excelData).then(() => {
+        this.$store.dispatch('user/batchAddOrg', excelData).then(() => {
           this.fullscreenLoading = false
           this.open()
         }).catch(() => {
@@ -237,6 +274,39 @@ export default {
           this.errorMsg = '请导入正确信息'
         })
       }
+    },
+    queryOrg() {
+      this.loading = true
+      const data = {
+        orgId: this.condition.orgId,
+        orgName: this.condition.orgName
+      }
+      console.log(data)
+      queryOrg(data).then(res => {
+        console.log(res)
+        this.excelData = res.data
+        this.loading = false
+      })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    removeBatch() {
+      const length = this.multipleSelection.length
+      for (let i = 0; i < length; i++) {
+        this.personIds += this.multipleSelection[i].personId + ','
+      }
+      batchDelete(this.personIds).then(res => {
+        console.log(res)
+        this.$message('删除成功')
+        this.queryOrg()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+      this.personIds = ''
     },
     downloadExl(json, downName, type) { // 导出到excel
       const keyMap = [] // 获取键
@@ -296,61 +366,16 @@ export default {
       }
       return s
     },
-    openChangeInfo(scope) {
-      this.detailForm.faultId = scope.row.faultId
-      this.detailForm.faultName = scope.row.faultName
-      this.detailForm.pastId = scope.row.faultId
-      this.detailVisible = true
-    },
-    openAddInfo(scope) {
-      this.addForm.faultId = ''
-      this.addForm.faultName = ''
+    openAddInfo() {
+      this.addForm.personId = ''
+      this.addForm.orgName = ''
+      this.addForm.workNo = ''
+      this.addForm.orgId = ''
+      this.addForm.password = ''
       this.addVisible = true
     },
-    openDeleteInfo(scope) {
-      this.deleteForm.faultId = scope.row.faultId
-      this.deleteVisible = true
-    },
-    handleChange() {
-      manageFault(this.detailForm).then(res => {
-        console.log(res)
-        if (res.code === 200) {
-          this.$message({
-            type: 'success',
-            message: '成功'
-          })
-        } else {
-          this.$message({
-            type: 'fail',
-            message: res.message
-          })
-        }
-        this.detailVisible = false
-        this.queryFault()
-      })
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    removeBatch() {
-      const length = this.multipleSelection.length
-      for (let i = 0; i < length; i++) {
-        this.faultIds += this.multipleSelection[i].faultId + ','
-      }
-      batchDelete(this.faultIds).then(res => {
-        console.log(res)
-        this.$message('删除成功')
-        this.queryFault()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
-      this.faultIds = ''
-    },
     handleAdd() {
-      addFault(this.addForm).then(res => {
+      addOrg(this.addForm).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$message({
@@ -364,11 +389,64 @@ export default {
           })
         }
         this.addVisible = false
-        this.queryFault()
+        this.queryOrg()
       })
     },
+    openChangeInfo(scope) {
+      this.detailForm.personId = scope.row.personId
+      this.detailForm.orgName = scope.row.orgName
+      this.detailForm.workNo = scope.row.workNo
+      this.detailForm.orgId = scope.row.orgId
+      this.detailVisible = true
+    },
+    handleChange() {
+      manageOrg(this.detailForm).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: '成功'
+          })
+        } else {
+          this.$message({
+            type: 'fail',
+            message: res.message
+          })
+        }
+        this.detailVisible = false
+        this.queryOrg()
+      })
+    },
+    openPassInfo(scope) {
+      this.changeForm.personId = scope.row.personId
+      this.changeForm.orgId = scope.row.orgId
+      this.changeForm.password = ''
+      this.changeVisible = true
+    },
+    handlePass() {
+      ChangePass(this.changeForm).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: '成功'
+          })
+        } else {
+          this.$message({
+            type: 'fail',
+            message: res.message
+          })
+        }
+        this.changeVisible = false
+        this.queryOrg()
+      })
+    },
+    openDeleteInfo(scope) {
+      this.deleteForm.personId = scope.row.personId
+      this.deleteVisible = true
+    },
     handleDelete() {
-      deleteFault(this.deleteForm.faultId).then(res => {
+      deleteOrg(this.deleteForm.personId).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$message({
@@ -382,7 +460,7 @@ export default {
           })
         }
         this.deleteVisible = false
-        this.queryFault()
+        this.queryOrg()
       })
     }
   }
@@ -390,4 +468,5 @@ export default {
 </script>
 
 <style>
+
 </style>

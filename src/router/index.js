@@ -93,6 +93,12 @@ export const constantRoutes = [
             name: 'edit_engineer',
             component: () => import('@/views/user/index'),
             meta: { title: '用户管理', icon: 'table' }
+          },
+          {
+            path: 'edit_org',
+            name: 'edit_prg',
+            component: () => import('@/views/add_org/index'),
+            meta: { title: '机构管理', icon: 'table' }
           }
         ]
       },
@@ -105,7 +111,7 @@ export const constantRoutes = [
           {
             path: 'area_management',
             name: 'area_management',
-            component: () => import('@/views/add_org/index'),
+            component: () => import('@/views/add_area/index'),
             meta: { title: '区域管理', icon: 'table' }
           },
           {

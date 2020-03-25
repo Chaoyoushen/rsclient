@@ -11,18 +11,18 @@
         >
         <a id="downlink" />
         <el-form :inline="true" :model="condition" style="margin-top: 12px">
-          <el-form-item label="故障描述" style="text-align: center">
-            <el-input v-model="condition.descriptionDetail" placeholder="" />
+          <el-form-item label="区域名" style="text-align: center">
+            <el-input v-model="condition.faultName" placeholder="" />
           </el-form-item>
-          <el-form-item label="故障描述编号" style="text-align: center">
-            <el-input v-model="condition.descriptionId" placeholder="" />
+          <el-form-item label="区域编号" style="text-align: center">
+            <el-input v-model="condition.faultId" placeholder="" />
           </el-form-item>
-          <el-button class="button" @click="queryDescription()">查询</el-button>
+          <el-button class="button" @click="queryFault()">查询</el-button>
           <el-button class="button" @click="openAddInfo()">增加</el-button>
           <el-button class="button" @click="removeBatch()">删除</el-button>
           <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
           <el-button class="button" @click="uploadFile()">导入</el-button>
-          <el-button class="button" @click="batchAddDescription(excelData)">上传</el-button>
+          <el-button class="button" @click="batchAddFault(excelData)">上传</el-button>
           <!--错误信息提示-->
           <el-dialog v-model="errorDialog" title="提示">
             <span>{{ errorMsg }}</span>
@@ -34,10 +34,10 @@
       </el-header>
       <el-main>
         <!--展示导入信息-->
-        <el-table ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :data="excelData" tooltip-effect="dark">
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="故障描述" prop="descriptionDetail" show-overflow-tooltip />
-          <el-table-column label="故障描述编号" prop="descriptionId" show-overflow-tooltip />
+        <el-table ref="multipleTable" v-loading="loading" :data="excelData" tooltip-effect="dark" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" />
+          <el-table-column label="区域名" prop="faultName" show-overflow-tooltip />
+          <el-table-column label="区域编号" prop="faultId" show-overflow-tooltip />
           <el-table-column label="操作" fixed="right" header-align="center" align="center">
             <template slot-scope="scope">
               <el-button
@@ -62,11 +62,11 @@
     >
       <span>
         <el-form :model="detailForm" label-width="80px">
-          <el-form-item label="故障描述">
-            <el-input v-model="detailForm.descriptionDetail" style="width: 250px" />
+          <el-form-item label="区域名">
+            <el-input v-model="detailForm.faultName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="故障描述编号">
-            <el-input v-model="detailForm.descriptionId" style="width: 250px" />
+          <el-form-item label="区域编号">
+            <el-input v-model="detailForm.faultId" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -83,11 +83,11 @@
     >
       <span>
         <el-form :model="addForm" label-width="80px">
-          <el-form-item label="故障描述">
-            <el-input v-model="addForm.descriptionDetail" style="width: 250px" />
+          <el-form-item label="区域名">
+            <el-input v-model="addForm.faultName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="故障描述编号">
-            <el-input v-model="addForm.descriptionId" style="width: 250px" />
+          <el-form-item label="区域编号">
+            <el-input v-model="addForm.faultId" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -107,8 +107,8 @@
 
 <script>
 import '@/utils/excel'
-import { queryDescription } from '@/api/admin'
-import { manageDescription, batchDelete, addDescription, deleteDescription } from '@/api/description'
+import { queryFault } from '@/api/admin'
+import { manageFault, batchDelete, addFault, deleteFault } from '@/api/fault'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -121,26 +121,27 @@ export default {
       errorMsg: '', // 错误信息内容
       excelData: [],
       multipleSelection: [],
+      repeatdata: [],
       loading: false,
-      descriptionIds: '',
+      faultIds: '',
       detailVisible: false,
       deleteVisible: false,
       addVisible: false,
       detailForm: {
-        descriptionId: '',
-        descriptionDetail: '',
+        faultId: '',
+        faultName: '',
         pastId: ''
       },
       addForm: {
-        descriptionId: '',
-        descriptionDetail: ''
+        faultId: '',
+        faultName: ''
       },
       deleteForm: {
-        descriptionId: ''
+        faultId: ''
       },
       condition: {
-        descriptionId: '',
-        descriptionDetail: ''
+        faultId: '',
+        faultName: ''
       }
     }
   },
@@ -152,14 +153,14 @@ export default {
     open() {
       this.$message('导入成功')
     },
-    queryDescription() {
+    queryFault() {
       this.loading = true
       const data = {
-        descriptionId: this.condition.descriptionId,
-        descriptionDetail: this.condition.descriptionDetail
+        faultId: this.condition.faultId,
+        faultName: this.condition.faultName
       }
       console.log(data)
-      queryDescription(data).then(res => {
+      queryFault(data).then(res => {
         console.log(res)
         this.excelData = res.data
         this.loading = false
@@ -171,7 +172,7 @@ export default {
         data[0][k] = k
       }
       data = data.concat(rs)
-      this.downloadExl(data, '描述列表')
+      this.downloadExl(data, '区域列表')
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()
@@ -220,14 +221,14 @@ export default {
         this.excelData = data
       }
     },
-    batchAddDescription(excelData) {
+    batchAddFault(excelData) {
       if (excelData.length <= 0) {
         this.errorDialog = true
         this.errorMsg = '请导入正确信息'
       } else {
         this.fullscreenLoading = true
         console.log(JSON.stringify(excelData))
-        this.$store.dispatch('user/batchAddDescription', excelData).then(() => {
+        this.$store.dispatch('user/batchAddFault', excelData).then(() => {
           this.fullscreenLoading = false
           this.open()
         }).catch(() => {
@@ -296,22 +297,22 @@ export default {
       return s
     },
     openChangeInfo(scope) {
-      this.detailForm.descriptionId = scope.row.descriptionId
-      this.detailForm.descriptionDetail = scope.row.descriptionDetail
-      this.detailForm.pastId = scope.row.descriptionId
+      this.detailForm.faultId = scope.row.faultId
+      this.detailForm.faultName = scope.row.faultName
+      this.detailForm.pastId = scope.row.faultId
       this.detailVisible = true
     },
     openAddInfo(scope) {
-      this.addForm.descriptionId = ''
-      this.addForm.descriptionDetail = ''
+      this.addForm.faultId = ''
+      this.addForm.faultName = ''
       this.addVisible = true
     },
     openDeleteInfo(scope) {
-      this.deleteForm.descriptionId = scope.row.descriptionId
+      this.deleteForm.faultId = scope.row.faultId
       this.deleteVisible = true
     },
     handleChange() {
-      manageDescription(this.detailForm).then(res => {
+      manageFault(this.detailForm).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$message({
@@ -325,7 +326,7 @@ export default {
           })
         }
         this.detailVisible = false
-        this.queryDescription()
+        this.queryFault()
       })
     },
     handleSelectionChange(val) {
@@ -334,22 +335,22 @@ export default {
     removeBatch() {
       const length = this.multipleSelection.length
       for (let i = 0; i < length; i++) {
-        this.descriptionIds += this.multipleSelection[i].descriptionId + ','
+        this.faultIds += this.multipleSelection[i].faultId + ','
       }
-      batchDelete(this.descriptionIds).then(res => {
+      batchDelete(this.faultIds).then(res => {
         console.log(res)
         this.$message('删除成功')
-        this.queryDescription()
+        this.queryFault()
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
         })
       })
-      this.descriptionIds = ''
+      this.faultIds = ''
     },
     handleAdd() {
-      addDescription(this.addForm).then(res => {
+      addFault(this.addForm).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$message({
@@ -363,11 +364,11 @@ export default {
           })
         }
         this.addVisible = false
-        this.queryDescription()
+        this.queryFault()
       })
     },
     handleDelete() {
-      deleteDescription(this.deleteForm.descriptionId).then(res => {
+      deleteFault(this.deleteForm.faultId).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$message({
@@ -381,7 +382,7 @@ export default {
           })
         }
         this.deleteVisible = false
-        this.queryDescription()
+        this.queryFault()
       })
     }
   }
