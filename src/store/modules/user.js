@@ -1,4 +1,4 @@
-import { login, logout, getInfo, batchImportOrg, batchImportMachine, batchImportUser, batchImportFault, batchImportDescription } from '@/api/user'
+import { logout, getInfo, batchImportOrg, batchImportMachine, batchImportUser, batchImportFault, batchImportDescription } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -22,18 +22,9 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
-    const { workNo, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ workNo: workNo.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+  setToken({ commit }, token) {
+    commit('SET_TOKEN', token)
+    setToken(token)
   },
   batchAddOrg({ commit }, list) {
     return new Promise((resolve, reject) => {
