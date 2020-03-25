@@ -172,7 +172,7 @@ export default {
         data[0][k] = k
       }
       data = data.concat(rs)
-      this.downloadExl(data, '设备列表')
+      this.downloadExl(data, '区域列表')
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()

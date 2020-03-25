@@ -209,7 +209,7 @@ export default {
         data[0][k] = k
       }
       data = data.concat(rs)
-      this.downloadExl(data, '用户列表')
+      this.downloadExl(data, '机构列表')
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()
