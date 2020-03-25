@@ -216,8 +216,8 @@ export default {
       changeVisible: false,
       deleteVisible: false,
       addVisible: false,
-      types: [{ 'label': '用户', 'value': '用户' }, { 'label': '内场工程师', 'value': '内场工程师' }, { 'label': '管理员', 'value': '管理员' }, { 'label': '外场工程师', 'value': '外场工程师' }, { 'label': '机构', 'value': '机构' }],
-      querytypes: [{ 'label': '用户', 'value': '0' }, { 'label': '内场工程师', 'value': '1' }, { 'label': '管理员', 'value': '2' }, { 'label': '外场工程师', 'value': '3' }, { 'label': '机构', 'value': '4' }],
+      types: [{ 'label': '用户', 'value': '用户' }, { 'label': '内场工程师', 'value': '内场工程师' }, { 'label': '管理员', 'value': '管理员' }, { 'label': '外场工程师', 'value': '外场工程师' }],
+      querytypes: [{ 'label': '用户', 'value': '0' }, { 'label': '内场工程师', 'value': '1' }, { 'label': '管理员', 'value': '2' }, { 'label': '外场工程师', 'value': '3' }],
       brs: [],
       condition: {
         personName: '',
