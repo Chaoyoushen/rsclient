@@ -4,8 +4,7 @@ export function getList(data) {
   return request({
     url: '/admin/getWOList',
     method: 'post',
-    data,
-    responseType: 'blob'
+    data
   })
 }
 
