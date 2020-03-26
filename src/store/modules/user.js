@@ -22,25 +22,9 @@ const mutations = {
 
 const actions = {
   // user login
-<<<<<<< HEAD
   setToken({ commit }, token) {
     commit('SET_TOKEN', token)
     setToken(token)
-=======
-  login({ commit }, userInfo) {
-    const { workNo, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ workNo: workNo.trim(), password: password }).then(response => {
-        const { data } = response
-        console.log(data)
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
->>>>>>> 9da4a3d8b792ba8d3882d74149f31e7c6a4e459b
   },
   batchAddOrg({ commit }, list) {
     return new Promise((resolve, reject) => {

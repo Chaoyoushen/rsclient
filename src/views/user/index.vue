@@ -15,12 +15,12 @@
             <el-form-item label="用户名" style="text-align: center">
               <el-input v-model="condition.personName" placeholder="联系人" />
             </el-form-item>
-            <el-form-item label="机构编号">
+            <el-form-item label="网点">
               <el-select v-model="condition.orgId" clearable placeholder="请选择" filterable>
                 <el-option
                   v-for="item in brs"
                   :key="item.value"
-                  :label="item.value"
+                  :label="item.label"
                   :value="item.value"
                 />
               </el-select>
@@ -106,12 +106,12 @@
           <el-form-item label="用户名称">
             <el-input v-model="detailForm.personName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="机构编号">
+          <el-form-item label="网点">
             <el-select v-model="detailForm.orgId" placeholder="请选择" filterable>
               <el-option
                 v-for="item in brs"
                 :key="item.value"
-                :label="item.value"
+                :label="item.label"
                 :value="item.value"
               />
             </el-select>
@@ -147,12 +147,12 @@
           <el-form-item label="用户名称">
             <el-input v-model="addForm.personName" style="width: 250px" />
           </el-form-item>
-          <el-form-item label="机构编号">
+          <el-form-item label="网点">
             <el-select v-model="addForm.orgId" placeholder="请选择" filterable>
               <el-option
                 v-for="item in brs"
                 :key="item.value"
-                :label="item.value"
+                :label="item.label"
                 :value="item.value"
               />
             </el-select>
