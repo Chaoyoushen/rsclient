@@ -232,6 +232,7 @@ export default {
       workers: [],
       opList: [],
       loading: false,
+      opLoading: false,
       detailForm: {
         person: '',
         phone: '',
