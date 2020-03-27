@@ -85,6 +85,11 @@
               >派单</el-button>
               <el-button
                 size="mini"
+                type="primary"
+                @click="handleOPInfo(scope)"
+              >流程</el-button>
+              <el-button
+                size="mini"
                 type="danger"
                 @click="openCloseOrderDialog(scope)"
               >关单</el-button>
@@ -166,11 +171,29 @@
         <el-button type="primary" @click="handleCloseOrder">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog v-loading="opLoading" title="流程跟踪" :visible.sync="opVisible" center>
+      <el-timeline :reverse="false">
+        <el-timeline-item
+          v-for="(op, index) in opList"
+          :key="index"
+          :timestamp="timestampToTime(op.time)"
+          placement="top"
+        >
+          <el-card>
+            <h4>{{ '操作意见:' + op.operationInfo }}</h4>
+            <p>{{ '操作人:' + op.person }}</p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeOPDialog">关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { initWOList, getList, manageWO, getWOInfo } from '@/api/admin'
+import { initWOList, getList, manageWO, getWOInfo, queryOPList } from '@/api/admin'
 export default {
   name: 'WoList',
   data() {
@@ -191,9 +214,15 @@ export default {
         type: '2',
         orderId: ''
       },
+      opForm: {
+        operationInfo: '',
+        type: '3',
+        orderId: ''
+      },
       detailVisible: false,
       offerVisible: false,
       closeWOVisible: false,
+      opVisible: false,
       tableData: [],
       fullscreenLoading: false,
       offerOrderLoading: false,
@@ -201,6 +230,7 @@ export default {
       types: [{ 'label': '未分派', 'value': '1' }, { 'label': '已分派', 'value': '2' }, { 'label': '已处理', 'value': '3' }, { 'label': '已关闭', 'value': '4' }],
       brs: [],
       workers: [],
+      opList: [],
       loading: false,
       detailForm: {
         person: '',
@@ -247,6 +277,11 @@ export default {
       this.closeForm.operationInfo = ''
       this.closeWOVisible = true
     },
+    closeOPDialog() {
+      this.opForm.orderId = ''
+      this.opList = []
+      this.opVisible = false
+    },
     handleCloseOrder() {
       this.closeOrderLoading = true
       manageWO(this.closeForm).then(res => {
@@ -287,6 +322,15 @@ export default {
         this.onSubmit()
       })
     },
+    handleOPInfo(scope) {
+      console.log(scope.row.orderId)
+      queryOPList(scope.row.orderId).then(res => {
+        console.log(res)
+        this.opList = res.data
+        this.opForm.orderId = scope.row.orderId
+        this.opVisible = true
+      })
+    },
     handleDetailInfo(scope) {
       console.log(scope.row.orderId)
       getWOInfo(scope.row.orderId).then(res => {
@@ -300,7 +344,7 @@ export default {
         if (tmp[0] !== '') {
           const urls = []
           for (const index in tmp) {
-            const url = process.env.VUE_APP_BASE_API + '/image/' + tmp[index]
+            const url = tmp[index]
             urls.push(url)
           }
           this.detailForm.images = urls
@@ -312,7 +356,18 @@ export default {
         this.detailForm.br = res.data.br
         this.detailVisible = true
       })
+    },
+    timestampToTime(timestamp) {
+      const date = new Date(parseInt(timestamp))
+      const Y = date.getFullYear() + '-'
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+      const D = date.getDate() + ' '
+      const h = date.getHours() + ':'
+      const m = date.getMinutes() + ':'
+      const s = date.getSeconds()
+      return Y + M + D + h + m + s
     }
+
   }
 }
 </script>

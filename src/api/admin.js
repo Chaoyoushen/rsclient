@@ -54,3 +54,11 @@ export function getWOInfo(data) {
     data
   })
 }
+
+export function queryOPList(data) {
+  return request({
+    url: '/operation/queryOPList',
+    method: 'post',
+    data
+  })
+}
