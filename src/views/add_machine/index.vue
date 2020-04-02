@@ -141,15 +141,18 @@ export default {
         machineId: '',
         machineName: '',
         parentId: '',
-        pastId: ''
+        pastId: '',
+        id: ''
       },
       addForm: {
         machineId: '',
         machineName: '',
-        parentId: ''
+        parentId: '',
+        id: ''
       },
       deleteForm: {
-        machineId: ''
+        machineId: '',
+        id: ''
       },
       condition: {
         machineId: '',
@@ -315,16 +318,19 @@ export default {
       this.detailForm.machineName = scope.row.machineName
       this.detailForm.machineId = scope.row.machineId
       this.detailForm.pastId = scope.row.machineId
+      this.detailForm.id = scope.row.id
       this.detailVisible = true
     },
     openAddInfo(scope) {
       this.addForm.parentId = ''
       this.addForm.machineName = ''
       this.addForm.machineId = ''
+      this.addForm.id = ''
       this.addVisible = true
     },
     openDeleteInfo(scope) {
       this.deleteForm.machineId = scope.row.machineId
+      this.deleteForm.id = scope.row.id
       this.deleteVisible = true
     },
     handleChange() {
@@ -351,7 +357,7 @@ export default {
     removeBatch() {
       const length = this.multipleSelection.length
       for (let i = 0; i < length; i++) {
-        this.machineIds += this.multipleSelection[i].machineId + ','
+        this.machineIds += this.multipleSelection[i].id + ','
       }
       batchDelete(this.machineIds).then(res => {
         console.log(res)
@@ -384,7 +390,7 @@ export default {
       })
     },
     handleDelete() {
-      deleteMachines(this.deleteForm.machineId).then(res => {
+      deleteMachines(this.deleteForm.id).then(res => {
         console.log(res)
         if (res.code === 200) {
           this.$message({
