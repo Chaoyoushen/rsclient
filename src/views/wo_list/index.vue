@@ -115,8 +115,11 @@
           <el-form-item label="网点名称">
             <el-input v-model="detailForm.br" style="width: 250px" disabled />
           </el-form-item>
-          <el-form-item label="故障类型">
+          <el-form-item label="故障区域">
             <el-input v-model="detailForm.fault" style="width: 250px" disabled />
+          </el-form-item>
+          <el-form-item label="故障类型">
+            <el-input v-model="detailForm.faultType" style="width: 250px" disabled />
           </el-form-item>
           <el-form-item label="设备类型">
             <el-input v-model="detailForm.machine" style="width: 350px" disabled />
@@ -237,6 +240,7 @@ export default {
         person: '',
         phone: '',
         fault: '',
+        faultType: '',
         machine: '',
         desc: '',
         br: '',
@@ -340,7 +344,7 @@ export default {
         this.detailForm.fault = res.data.fault
         this.detailForm.machine = res.data.machine
         this.detailForm.phone = res.data.phone
-        this.detailForm.desc = res.data.description
+        this.detailForm.faultType = res.data.faultType
         const tmp = res.data.images.split(';')
         if (tmp[0] !== '') {
           const urls = []
