@@ -20,7 +20,7 @@
           <el-button class="button" @click="queryFault()">查询</el-button>
           <el-button class="button" @click="openAddInfo()">增加</el-button>
           <el-button class="button" @click="removeBatch()">删除</el-button>
-          <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
+          <el-button class="button" @click="downloadFile()">导出</el-button>
           <el-button class="button" @click="uploadFile()">导入</el-button>
           <el-button class="button" @click="batchAddFault(excelData)">上传</el-button>
           <!--错误信息提示-->
@@ -107,8 +107,10 @@
 
 <script>
 import '@/utils/excel'
+import { saveAs } from 'file-saver'
 import { queryFault } from '@/api/admin'
-import { manageFault, batchDelete, addFault, deleteFault } from '@/api/fault'
+import { manageFault, batchDelete, addFault, deleteFault, getFaultExcel } from '@/api/fault'
+import { getMachineExcel } from '@/api/machine'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -166,13 +168,12 @@ export default {
         this.loading = false
       })
     },
-    downloadFile(rs, name) { // 点击导出按钮
-      let data = [{}]
-      for (const k in rs[0]) {
-        data[0][k] = k
-      }
-      data = data.concat(rs)
-      this.downloadExl(data, '区域列表')
+    downloadFile() { // 点击导出按钮
+      getFaultExcel().then(resp => {
+        const fileName = '故障区域信息.xls'
+        const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
+        saveAs(blob, fileName)
+      })
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()

@@ -113,3 +113,10 @@ export function batchImportDescription(data) {
     data
   })
 }
+export function getUserExcel() {
+  return request({
+    url: '/user/getUserExcel',
+    method: 'post',
+    responseType: 'blob'
+  })
+}

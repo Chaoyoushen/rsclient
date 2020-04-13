@@ -8,6 +8,14 @@ export function manageMachines(data) {
   })
 }
 
+export function getMachineExcel() {
+  return request({
+    url: '/machine/getMachineExcel',
+    method: 'post',
+    responseType: 'blob'
+  })
+}
+
 export function deleteMachines(data) {
   return request({
     url: '/machine/deleteMachines',

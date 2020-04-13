@@ -31,3 +31,10 @@ export function addFault(data) {
     data
   })
 }
+export function getFaultExcel() {
+  return request({
+    url: '/fault/getFaultExcel',
+    method: 'post',
+    responseType: 'blob'
+  })
+}

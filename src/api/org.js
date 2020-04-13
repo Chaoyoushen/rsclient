@@ -47,3 +47,11 @@ export function batchDelete(data) {
     data
   })
 }
+
+export function getOrgExcel() {
+  return request({
+    url: '/org/getOrgExcel',
+    method: 'post',
+    responseType: 'blob'
+  })
+}

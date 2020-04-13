@@ -31,3 +31,11 @@ export function addDescription(data) {
     data
   })
 }
+
+export function getDescriptionExcel() {
+  return request({
+    url: '/description/getDescriptionExcel',
+    method: 'post',
+    responseType: 'blob'
+  })
+}

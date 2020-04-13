@@ -23,7 +23,7 @@
           <el-button class="button" @click="queryMachine()">查询</el-button>
           <el-button class="button" @click="openAddInfo()">增加</el-button>
           <el-button class="button" @click="removeBatch()">删除</el-button>
-          <el-button class="button" @click="downloadFile(excelData)">导出</el-button>
+          <el-button class="button" @click="downloadFile()">导出</el-button>
           <el-button class="button" @click="uploadFile()">导入</el-button>
           <el-button class="button" @click="batchAddMachine(excelData)">上传</el-button>
           <!--错误信息提示-->
@@ -117,8 +117,9 @@
 
 <script>
 import '@/utils/excel'
+import { saveAs } from 'file-saver'
 import { queryMachines } from '@/api/admin'
-import { manageMachines, batchDelete, addMachines, deleteMachines } from '@/api/machine'
+import { manageMachines, batchDelete, addMachines, deleteMachines, getMachineExcel } from '@/api/machine'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -183,13 +184,12 @@ export default {
         this.loading = false
       })
     },
-    downloadFile(rs, name) { // 点击导出按钮
-      let data = [{}]
-      for (const k in rs[0]) {
-        data[0][k] = k
-      }
-      data = data.concat(rs)
-      this.downloadExl(data, '设备列表')
+    downloadFile() { // 点击导出
+      getMachineExcel().then(resp => {
+        const fileName = '设备信息.xls'
+        const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
+        saveAs(blob, fileName)
+      })
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()
@@ -255,46 +255,6 @@ export default {
         })
       }
     },
-    downloadExl(json, downName, type) { // 导出到excel
-      const keyMap = [] // 获取键
-      for (const k in json[0]) {
-        keyMap.push(k)
-      }
-      console.info('keyMap', keyMap, json)
-      const tmpdata = [] // 用来保存转换好的json
-      json.map((v, i) => keyMap.map((k, j) => Object.assign({}, {
-        v: v[k],
-        position: (j > 25 ? this.getCharCol(j) : String.fromCharCode(65 + j)) + (i + 1)
-      }))).reduce((prev, next) => prev.concat(next)).forEach(function(v) {
-        tmpdata[v.position] = {
-          v: v.v
-        }
-      })
-      const outputPos = Object.keys(tmpdata) // 设置区域,比如表格从A1到D10
-      const tmpWB = {
-        SheetNames: ['mySheet'], // 保存的表标题
-        Sheets: {
-          'mySheet': Object.assign({},
-            tmpdata, // 内容
-            {
-              '!ref': outputPos[0] + ':' + outputPos[outputPos.length - 1] // 设置填充区域
-            })
-        }
-      }
-      const tmpDown = new Blob([this.s2ab(XLSX.write(tmpWB,
-        { bookType: (type === undefined ? 'xlsx' : type), bookSST: false, type: 'binary' } // 这里的数据是用来定义导出的格式类型
-      ))], {
-        type: ''
-      }) // 创建二进制对象写入转换好的字节流
-      const href = URL.createObjectURL(tmpDown) // 创建对象超链接
-      this.outFile.download = downName + '.xlsx' // 下载名称
-      this.outFile.href = href // 绑定a标签
-      this.outFile.click() // 模拟点击实现下载
-      setTimeout(function() { // 延时释放
-        URL.revokeObjectURL(tmpDown) // 用URL.revokeObjectURL()来释放这个object URL
-      }, 100)
-    },
-
     s2ab(s) { // 字符串转字符流
       const buf = new ArrayBuffer(s.length)
       const view = new Uint8Array(buf)

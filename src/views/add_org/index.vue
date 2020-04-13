@@ -28,7 +28,7 @@
               <el-button type="primary" @click="removeBatch()">删除</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="downloadFile(excelData)">导出</el-button>
+              <el-button type="primary" @click="downloadFile()">导出</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="uploadFile()">导入</el-button>
@@ -145,7 +145,9 @@
 </template>
 
 <script>
-import { queryOrg, manageOrg, deleteOrg, ChangePass, addOrg, batchDelete } from '@/api/org'
+import { saveAs } from 'file-saver'
+import { queryOrg, manageOrg, deleteOrg, ChangePass, addOrg, batchDelete, getOrgExcel } from '@/api/org'
+import { getMachineExcel } from '@/api/machine'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -203,13 +205,12 @@ export default {
     open() {
       this.$message('导入成功')
     },
-    downloadFile: function(rs) { // 按钮导出
-      let data = [{}]
-      for (const k in rs[0]) {
-        data[0][k] = k
-      }
-      data = data.concat(rs)
-      this.downloadExl(data, '机构列表')
+    downloadFile() { // 点击导出按钮
+      getOrgExcel().then(resp => {
+        const fileName = '机构信息.xls'
+        const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
+        saveAs(blob, fileName)
+      })
     },
     uploadFile() { // 点击导入按钮
       this.imFile.click()
