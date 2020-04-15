@@ -64,6 +64,7 @@
           <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
           <el-table-column label="用户类型" prop="role" show-overflow-tooltip />
           <el-table-column label="工号" prop="workNo" show-overflow-tooltip />
+          <el-table-column label="电话" prop="phone" show-overflow-tooltip />
           <el-table-column label="操作" fixed="right" header-align="center" align="center">
             <template slot-scope="scope">
               <el-button
@@ -119,6 +120,9 @@
           <el-form-item label="工号">
             <el-input v-model="detailForm.workNo" style="width: 250px" />
           </el-form-item>
+          <el-form-item label="电话">
+            <el-input v-model="detailForm.phone" style="width: 250px" />
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="detailVisible = false">取 消</el-button>
@@ -162,6 +166,9 @@
           </el-form-item>
           <el-form-item label="密码">
             <el-input v-model="addForm.password" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="电话">
+            <el-input v-model="addForm.phone" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -231,14 +238,16 @@ export default {
         orgId: '',
         personName: '',
         workNo: '',
-        role: ''
+        role: '',
+        phone: ''
       },
       detailForm: {
         personId: '',
         orgId: '',
         personName: '',
         workNo: '',
-        role: ''
+        role: '',
+        phone: ''
       },
       deleteForm: {
         personId: ''
@@ -435,6 +444,7 @@ export default {
       this.addForm.orgId = ''
       this.addForm.role = ''
       this.addForm.password = ''
+      this.addForm.phone = ''
       this.addVisible = true
     },
     handleAdd() {
@@ -461,6 +471,7 @@ export default {
       this.detailForm.workNo = scope.row.workNo
       this.detailForm.orgId = scope.row.orgId
       this.detailForm.role = scope.row.role
+      this.detailForm.phone =scope.row.phone
       this.detailVisible = true
     },
     handleChange() {
