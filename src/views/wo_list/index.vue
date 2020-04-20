@@ -29,6 +29,9 @@
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="queryBadWOList">查询不满分工单</el-button>
+          </el-form-item>
         </el-form>
       </el-header>
       <el-main>
@@ -196,7 +199,7 @@
 </template>
 
 <script>
-import { initWOList, getList, manageWO, getWOInfo, queryOPList } from '@/api/admin'
+import { initWOList, getList, manageWO, getWOInfo, queryOPList, queryBadWOList } from '@/api/admin'
 export default {
   name: 'WoList',
   data() {
@@ -266,6 +269,14 @@ export default {
         sts: this.condition.sts
       }
       getList(data).then(res => {
+        console.log(res)
+        this.tableData = res.data
+        this.loading = false
+      })
+    },
+    queryBadWOList() {
+      this.loading = true
+      queryBadWOList().then(res => {
         console.log(res)
         this.tableData = res.data
         this.loading = false

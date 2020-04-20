@@ -15,6 +15,13 @@ export function initWOList() {
   })
 }
 
+export function queryBadWOList() {
+  return request({
+    url: '/admin/queryBadWOList',
+    method: 'post'
+  })
+}
+
 export function queryMachines(data) {
   return request({
     url: '/admin/queryMachines',
