@@ -13,10 +13,13 @@
           <a id="downlink" />
           <el-form :inline="true" :model="condition" style="margin-top: 12px">
             <el-form-item label="用户名" style="text-align: center">
-              <el-input v-model="condition.personName" placeholder="联系人" />
+              <el-input v-model="condition.personName" style="width: 75px" placeholder="联系人" />
+            </el-form-item>
+            <el-form-item label="工号" style="text-align: center">
+              <el-input v-model="condition.workNo" style="width: 75px" placeholder="工号" />
             </el-form-item>
             <el-form-item label="网点">
-              <el-select v-model="condition.orgId" clearable placeholder="请选择" filterable>
+              <el-select v-model="condition.orgId" clearable  placeholder="请选择" filterable>
                 <el-option
                   v-for="item in brs"
                   :key="item.value"
@@ -26,7 +29,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="用户类型">
-              <el-select v-model="condition.role" clearable placeholder="请选择" filterable>
+              <el-select v-model="condition.role" clearable style="width: 100px" placeholder="请选择" filterable>
                 <el-option
                   v-for="item in querytypes"
                   :key="item.value"
@@ -230,7 +233,8 @@ export default {
       condition: {
         personName: '',
         orgId: '',
-        role: ''
+        role: '',
+        workNo: ''
       },
       addForm: {
         password: '',
@@ -350,7 +354,8 @@ export default {
       const data = {
         orgId: this.condition.orgId,
         personName: this.condition.personName,
-        role: this.condition.role
+        role: this.condition.role,
+        workNo: this.condition.workNo
       }
       console.log(data)
       queryUser(data).then(res => {
@@ -471,7 +476,7 @@ export default {
       this.detailForm.workNo = scope.row.workNo
       this.detailForm.orgId = scope.row.orgId
       this.detailForm.role = scope.row.role
-      this.detailForm.phone =scope.row.phone
+      this.detailForm.phone = scope.row.phone
       this.detailVisible = true
     },
     handleChange() {

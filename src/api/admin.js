@@ -22,6 +22,13 @@ export function queryBadWOList() {
   })
 }
 
+export function queryChangeWOList() {
+  return request({
+    url: '/admin/queryChangeWOList',
+    method: 'post'
+  })
+}
+
 export function queryMachines(data) {
   return request({
     url: '/admin/queryMachines',
