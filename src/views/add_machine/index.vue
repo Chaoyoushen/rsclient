@@ -297,6 +297,8 @@ export default {
       this.detailForm.machineId = scope.row.machineId
       this.detailForm.pastId = scope.row.machineId
       this.detailForm.id = scope.row.id
+      this.detailForm.phone = scope.row.phone
+      this.detailForm.person = scope.row.person
       this.detailVisible = true
     },
     openAddInfo(scope) {
@@ -304,6 +306,8 @@ export default {
       this.addForm.machineName = ''
       this.addForm.machineId = ''
       this.addForm.id = ''
+      this.addForm.phone = ''
+      this.addForm.person = ''
       this.addVisible = true
     },
     openDeleteInfo(scope) {
