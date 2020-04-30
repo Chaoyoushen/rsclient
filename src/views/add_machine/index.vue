@@ -11,10 +11,10 @@
         >
         <a id="downlink" />
         <el-form :inline="true" :model="condition" style="margin-top: 12px">
-          <el-form-item label="用户名" style="text-align: center">
-            <el-input v-model="condition.machineName" placeholder="联系人" />
+          <el-form-item label="设备名称" style="text-align: center">
+            <el-input v-model="condition.machineName" placeholder="" />
           </el-form-item>
-          <el-form-item label="机器编号" style="text-align: center">
+          <el-form-item label="设备编号" style="text-align: center">
             <el-input v-model="condition.machineId" placeholder="" />
           </el-form-item>
           <el-form-item label="设备上属编号" style="text-align: center">
@@ -42,6 +42,8 @@
           <el-table-column label="设备名称或分类" prop="machineName" show-overflow-tooltip />
           <el-table-column label="设备编号" prop="machineId" show-overflow-tooltip />
           <el-table-column label="设备上属编号" prop="parentId" show-overflow-tooltip />
+          <el-table-column label="联系人" prop="person" show-overflow-tooltip />
+          <el-table-column label="联系电话" prop="phone" show-overflow-tooltip />
           <el-table-column label="操作" fixed="right" header-align="center" align="center">
             <template slot-scope="scope">
               <el-button
@@ -65,7 +67,7 @@
       center
     >
       <span>
-        <el-form :model="detailForm" label-width="80px">
+        <el-form :model="detailForm" label-width="150px">
           <el-form-item label="设备名称或分类">
             <el-input v-model="detailForm.machineName" style="width: 250px" />
           </el-form-item>
@@ -74,6 +76,12 @@
           </el-form-item>
           <el-form-item label="设备上属编号">
             <el-input v-model="detailForm.parentId" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="联系人">
+            <el-input v-model="detailForm.person" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="联系电话">
+            <el-input v-model="detailForm.phone" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -89,7 +97,7 @@
       center
     >
       <span>
-        <el-form :model="addForm" label-width="80px">
+        <el-form :model="addForm" label-width="150px">
           <el-form-item label="设备名称或分类">
             <el-input v-model="addForm.machineName" style="width: 250px" />
           </el-form-item>
@@ -98,6 +106,12 @@
           </el-form-item>
           <el-form-item label="设备上属编号">
             <el-input v-model="addForm.parentId" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="联系人">
+            <el-input v-model="addForm.person" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="联系电话">
+            <el-input v-model="addForm.phone" style="width: 250px" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -143,13 +157,17 @@ export default {
         machineName: '',
         parentId: '',
         pastId: '',
-        id: ''
+        id: '',
+        phone: '',
+        person: ''
       },
       addForm: {
         machineId: '',
         machineName: '',
         parentId: '',
-        id: ''
+        id: '',
+        phone: '',
+        person: ''
       },
       deleteForm: {
         machineId: '',
