@@ -12,11 +12,11 @@
           >
           <a id="downlink" />
           <el-form :inline="true" :model="condition" style="margin-top: 12px">
-            <el-form-item label="用户名" style="text-align: center">
-              <el-input v-model="condition.orgName" placeholder="联系人" />
+            <el-form-item label="机构名" style="text-align: center">
+              <el-input v-model="condition.orgName" placeholder="" />
             </el-form-item>
             <el-form-item label="机构编号">
-              <el-input v-model="condition.orgId" placeholder="请选择" />
+              <el-input v-model="condition.orgId" placeholder="" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="queryOrg()">查询</el-button>
@@ -41,22 +41,22 @@
       </el-header>
       <el-main style="text-align: center">
         <!--展示导入信息-->
-        <el-table ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :data="excelData" tooltip-effect="dark">
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="用户名称" prop="orgName" show-overflow-tooltip />
+        <el-table ref="multipleTable" v-loading="loading" :data="excelData" tooltip-effect="dark" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" />
+          <el-table-column label="机构名称" prop="orgName" show-overflow-tooltip />
           <el-table-column label="机构编号" prop="orgId" show-overflow-tooltip />
-          <el-table-column label="工号" prop="workNo" show-overflow-tooltip />
+<!--          <el-table-column label="工号" prop="workNo" show-overflow-tooltip />-->
           <el-table-column label="操作" fixed="right" header-align="center" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 @click="openChangeInfo(scope)"
               >编辑</el-button>
-              <el-button
-                size="mini"
-                type="primary"
-                @click="openPassInfo(scope)"
-              >改密</el-button>
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                type="primary"-->
+<!--                @click="openPassInfo(scope)"-->
+<!--              >改密</el-button>-->
               <el-button
                 size="mini"
                 type="danger"
@@ -75,15 +75,15 @@
     >
       <span>
         <el-form :model="detailForm" label-width="80px">
-          <el-form-item label="用户名称">
+          <el-form-item label="机构名称">
             <el-input v-model="detailForm.orgName" style="width: 250px" />
           </el-form-item>
           <el-form-item label="机构编号">
             <el-input v-model="detailForm.orgId" placeholder="请选择" />
           </el-form-item>
-          <el-form-item label="工号">
-            <el-input v-model="detailForm.workNo" style="width: 250px" />
-          </el-form-item>
+<!--          <el-form-item label="工号">-->
+<!--            <el-input v-model="detailForm.workNo" style="width: 250px" />-->
+<!--          </el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="detailVisible = false">取 消</el-button>
@@ -92,25 +92,25 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="用户详情"
+      title="详情"
       :visible.sync="addVisible"
       width="60%"
       center
     >
       <span>
         <el-form :model="addForm" label-width="80px">
-          <el-form-item label="用户名称">
+          <el-form-item label="机构名称">
             <el-input v-model="addForm.orgName" style="width: 250px" />
           </el-form-item>
           <el-form-item label="机构编号">
-            <el-input v-model="addForm.orgId" placeholder="请选择" filterable/>
+            <el-input v-model="addForm.orgId" placeholder="请选择" filterable />
           </el-form-item>
-          <el-form-item label="工号">
-            <el-input v-model="addForm.workNo" style="width: 250px" />
-          </el-form-item>
-          <el-form-item label="密码">
-            <el-input v-model="addForm.password" style="width: 250px" />
-          </el-form-item>
+<!--          <el-form-item label="工号">-->
+<!--            <el-input v-model="addForm.workNo" style="width: 250px" />-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="密码">-->
+<!--            <el-input v-model="addForm.password" style="width: 250px" />-->
+<!--          </el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addVisible = false">取 消</el-button>
@@ -124,7 +124,7 @@
         <el-button type="primary" @click="handleDelete()">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog v-loading="loading" title="改密" :visible.sync="changeVisible" center>
+    <!--<el-dialog v-loading="loading" title="改密" :visible.sync="changeVisible" center>
       <el-form :model="changeForm">
         <el-form-item label="新密码">
           <el-input v-model="changeForm.password" style="width: 60%" />
@@ -134,7 +134,7 @@
         <el-button @click="changeVisible = false">取 消</el-button>
         <el-button type="primary" @click="handlePass">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
     <el-dialog v-model="errorDialog" title="提示">
       <span>{{ errorMsg }}</span>
       <span slot="footer" class="dialog-footer">
@@ -146,8 +146,7 @@
 
 <script>
 import { saveAs } from 'file-saver'
-import { queryOrg, manageOrg, deleteOrg, ChangePass, addOrg, batchDelete, getOrgExcel } from '@/api/org'
-import { getMachineExcel } from '@/api/machine'
+import { queryOrg, manageOrg, deleteOrg, /* ChangePass,*/ addOrg, batchDelete, getOrgExcel } from '@/api/org'
 const XLSX = require('xlsx')
 export default {
   name: 'Index',
@@ -173,28 +172,28 @@ export default {
         role: ''
       },
       addForm: {
-        password: '',
+        /* password: '',*/
         personId: '',
         orgId: '',
-        orgName: '',
-        workNo: ''
+        orgName: ''/*,
+        workNo: ''*/
       },
       detailForm: {
-        password: '',
+        /* password: '',*/
         personId: '',
         orgId: '',
-        orgName: '',
-        workNo: ''
+        orgName: ''/*,
+        workNo: ''*/
       },
       deleteForm: {
         personId: ''
-      },
+      }/*,
       changeForm: {
         personId: '',
         password: '',
         role: '',
         orgId: ''
-      }
+      }*/
     }
   },
   mounted() {
@@ -370,9 +369,9 @@ export default {
     openAddInfo() {
       this.addForm.personId = ''
       this.addForm.orgName = ''
-      this.addForm.workNo = ''
+      /* this.addForm.workNo = ''*/
       this.addForm.orgId = ''
-      this.addForm.password = ''
+      /* this.addForm.password = ''*/
       this.addVisible = true
     },
     handleAdd() {
@@ -396,7 +395,7 @@ export default {
     openChangeInfo(scope) {
       this.detailForm.personId = scope.row.personId
       this.detailForm.orgName = scope.row.orgName
-      this.detailForm.workNo = scope.row.workNo
+      // this.detailForm.workNo = scope.row.workNo
       this.detailForm.orgId = scope.row.orgId
       this.detailVisible = true
     },
@@ -418,7 +417,7 @@ export default {
         this.queryOrg()
       })
     },
-    openPassInfo(scope) {
+    /* openPassInfo(scope) {
       this.changeForm.personId = scope.row.personId
       this.changeForm.orgId = scope.row.orgId
       this.changeForm.password = ''
@@ -441,7 +440,7 @@ export default {
         this.changeVisible = false
         this.queryOrg()
       })
-    },
+    },*/
     openDeleteInfo(scope) {
       this.deleteForm.personId = scope.row.personId
       this.deleteVisible = true
