@@ -4,12 +4,22 @@
       <el-header style="text-align: right; font-size: 12px">
         <el-form :inline="true" :model="condition" style="margin-top: 12px">
           <el-form-item label="联系人" style="text-align: center">
-            <el-input v-model="condition.person" placeholder="联系人" />
+            <el-input v-model="condition.person" style="width: 75px" placeholder="联系人" />
           </el-form-item>
           <el-form-item label="工单状态">
-            <el-select v-model="condition.sts" placeholder="请选择">
+            <el-select v-model="condition.sts" style="width: 75px" placeholder="请选择">
               <el-option
                 v-for="item in types"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="故障区域">
+            <el-select v-model="condition.fault" placeholder="请选择" filterable>
+              <el-option
+                v-for="item in faults"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -210,7 +220,8 @@ export default {
       condition: {
         person: '',
         org: '',
-        sts: ''
+        sts: '',
+        fault: ''
       },
       offerForm: {
         personId: '',
@@ -238,6 +249,7 @@ export default {
       closeOrderLoading: false,
       types: [{ 'label': '未分派', 'value': '1' }, { 'label': '已分派', 'value': '2' }, { 'label': '已处理', 'value': '3' }, { 'label': '已关闭', 'value': '4' }],
       brs: [],
+      faults: [],
       workers: [],
       opList: [],
       loading: false,
@@ -261,6 +273,7 @@ export default {
       console.log(res)
       this.brs = res.data.brs
       this.workers = res.data.workers
+      this.faults = res.data.faults
     })
   },
   methods: {
@@ -269,7 +282,8 @@ export default {
       const data = {
         org: this.condition.org,
         person: this.condition.person,
-        sts: this.condition.sts
+        sts: this.condition.sts,
+        faultId: this.condition.fault
       }
       getList(data).then(res => {
         console.log(res)
