@@ -40,7 +40,7 @@
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="queryBadWOList">查询不满分工单</el-button>
+            <el-button type="primary" @click="queryBadWOList">查询不满意工单</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="queryChangeWOList">查询转单工单</el-button>
