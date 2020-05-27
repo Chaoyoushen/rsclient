@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import { initWOList, getList, manageWO, getWOInfo, queryOPList, queryBadWOList , queryChangeWOList} from '@/api/admin'
+import { initWOList, getList, manageWO, getWOInfo, queryOPList, queryBadWOList, queryChangeWOList } from '@/api/admin'
 export default {
   name: 'WoList',
   data() {
@@ -227,6 +227,7 @@ export default {
         personId: '',
         operationInfo: '',
         orderId: '',
+        sts: '',
         type: '1'
       },
       closeForm: {

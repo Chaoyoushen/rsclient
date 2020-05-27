@@ -65,7 +65,7 @@ export const constantRoutes = [
       {
         path: 'wo_status_query',
         name: 'wo_status_query',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/form/index'),
         meta: { title: '报修工单', icon: 'table' }
       },
       {
