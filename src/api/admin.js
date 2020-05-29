@@ -8,6 +8,14 @@ export function getList(data) {
   })
 }
 
+export function getWOList(data) {
+  return request({
+    url: '/admin/getWODetailList',
+    method: 'post',
+    data
+  })
+}
+
 export function initWOList() {
   return request({
     url: '/admin/initWOList',

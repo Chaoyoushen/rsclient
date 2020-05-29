@@ -3,16 +3,16 @@
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="时间段">
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择开始日期" v-model="form.date1" style="width: 100%;" :picker-options="pickerOptions">
+          <el-date-picker type="date" placeholder="选择开始日期"  v-model="form.date1" style="width: 100%;" :picker-options="pickerOptions" value-format="timestamp">
             ></el-date-picker>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择结束日期" v-model="form.date2" style="width: 100%;" :picker-options="pickerOptions">
+          <el-date-picker type="date" placeholder="选择结束日期" v-model="form.date2" style="width: 100%;" :picker-options="pickerOptions" value-format="timestamp">
             ></el-date-picker>
         </el-col>
       </el-form-item>
-      <el-form-item label="接单时间">
+      <!--<el-form-item label="接单时间">
         <el-select v-model="form.time" placeholder="请选择时间">
           <el-option label="0.5小时内" value="0"></el-option>
           <el-option label="0.5-1小时" value="1"></el-option>
@@ -28,7 +28,7 @@
           <el-option label="4-8小时" value="3"></el-option>
           <el-option label="8小时以上" value="4"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="工号">
         <el-input v-model="form.workNo"></el-input>
       </el-form-item>
@@ -39,7 +39,7 @@
         <el-input v-model="form.machine"></el-input>
       </el-form-item>
       <el-form-item label="故障分类">
-        <el-select v-model="form.faultType" placeholder="请选择">
+        <el-select v-model="form.faultType" placeholder="请选择" clearable>
           <el-option label="网络问题" value="0"></el-option>
           <el-option label="操作系统及驱动" value="1"></el-option>
           <el-option label="硬件问题" value="2"></el-option>
@@ -48,13 +48,19 @@
         </el-select>
       </el-form-item>
       <el-form-item label="故障区域">
-        <el-select v-model="form.aera" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="form.area" placeholder="请选择故障区域" clearable>
+          <el-option label="办公区（1台）" value="F0001"></el-option>
+          <el-option label="办公区（多台）" value="F0002"></el-option>
+          <el-option label="高柜（1台）" value="F0003"></el-option>
+          <el-option label="高柜（多台）" value="F0004"></el-option>
+          <el-option label="厅堂客户经理（1台）" value="F0005"></el-option>
+          <el-option label="厅堂客户经理（多台）" value="F0006"></el-option>
+          <el-option label="厅堂智能服务区和其他自助机具" value="F0007"></el-option>
+          <el-option label="移动设备" value="F0008"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="工单状态">
-        <el-select v-model="form.sts" placeholder="请选择时间">
+        <el-select v-model="form.sts" placeholder="请选择时间" clearable>
           <el-option label="待审批" value="0"></el-option>
           <el-option label="处理中" value="1"></el-option>
           <el-option label="已解决" value="2"></el-option>
@@ -65,26 +71,26 @@
         <el-input v-model="form.worker"></el-input>
       </el-form-item>
       <el-form-item label="转单次数">
-        <el-select v-model="form.changeTime" placeholder="请选择时间">
-          <el-option label="1次" value="0"></el-option>
-          <el-option label="2次" value="1"></el-option>
-          <el-option label="2次以上" value="2"></el-option>
+        <el-select v-model="form.changeTime" placeholder="请选择时间" clearable>
+          <el-option label="1次" value="1"></el-option>
+          <el-option label="2次" value="2"></el-option>
+          <el-option label="2次以上" value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="满意度评价">
-        <el-select v-model="form.point" placeholder="请选择时间">
-          <el-option label="1星" value="0"></el-option>
-          <el-option label="2星" value="1"></el-option>
-          <el-option label="3星" value="2"></el-option>
-          <el-option label="4星" value="3"></el-option>
-          <el-option label="5星" value="4"></el-option>
-          <el-option label="3星及以上" value="5"></el-option>
-          <el-option label="3星以下" value="6"></el-option>
+        <el-select v-model="form.point" placeholder="请选择时间" clearable>
+          <el-option label="1星" value="1"></el-option>
+          <el-option label="2星" value="2"></el-option>
+          <el-option label="3星" value="3"></el-option>
+          <el-option label="4星" value="4"></el-option>
+          <el-option label="5星" value="5"></el-option>
+          <el-option label="3星及以上" value="6"></el-option>
+          <el-option label="3星以下" value="7"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
-        <el-button type="primary" @click="onSubmit">导出</el-button>
+<!--        <el-button type="primary" @click="onSubmit">导出</el-button>-->
       </el-form-item>
     </el-form>
     <el-main>
@@ -101,13 +107,13 @@
           align="center"
         />
         <el-table-column
-          prop="sts"
+          prop="orderSts"
           label="工单状态"
           header-align="center"
           align="center"
         />
         <el-table-column
-          prop="createdDate"
+          prop="createDate"
           label="生成时间"
           width="180"
           header-align="center"
@@ -128,42 +134,42 @@
           show-overflow-tooltip
         />
         <el-table-column
-          prop="worker"
+          prop="acceptPerson"
           label="工程师"
           width="180"
           header-align="center"
           align="center"
         />
         <el-table-column
-          prop="person"
+          prop="org"
           label="网点"
           width="180"
           header-align="center"
           align="center"
         />
         <el-table-column
-          prop="person"
+          prop="machineName"
           label="设备类型"
           width="180"
           header-align="center"
           align="center"
         />
         <el-table-column
-          prop="person"
+          prop="faultName"
           label="故障区域"
           width="180"
           header-align="center"
           align="center"
         />
         <el-table-column
-          prop="person"
+          prop="changeTime"
           label="转单次数"
           width="180"
           header-align="center"
           align="center"
         />
         <el-table-column
-          prop="person"
+          prop="point"
           label="评价"
           width="180"
           header-align="center"
@@ -175,6 +181,8 @@
 </template>
 
 <script>
+import { getWOList } from '@/api/admin'
+
 export default {
   data() {
     return {
@@ -228,6 +236,7 @@ export default {
       form: {
         sts: '',
         region: '',
+        machine: '',
         date1: '',
         date2: '',
         faultType: '',
@@ -245,7 +254,25 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log('submit!')
+      const data = {
+        date1: this.form.date1,
+        date2: this.form.date2,
+        workNo: this.form.workNo,
+        ownBr: this.form.org,
+        acctPersonName: this.form.worker,
+        machineName: this.form.machine,
+        faultType: this.form.faultType,
+        faultId: this.form.area,
+        orderSts: this.form.sts,
+        changeTime: this.form.changeTime,
+        point: this.form.point
+      }
+      console.log(data)
+      getWOList(data).then(res => {
+        console.log(res)
+        this.tableData = res.data
+        this.loading = false
+      })
     }
   }
 }
