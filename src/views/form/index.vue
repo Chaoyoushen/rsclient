@@ -12,7 +12,7 @@
             ></el-date-picker>
         </el-col>
       </el-form-item>
-      <!--<el-form-item label="接单时间">
+      <el-form-item label="接单时间">
         <el-select v-model="form.time" placeholder="请选择时间">
           <el-option label="0.5小时内" value="0"></el-option>
           <el-option label="0.5-1小时" value="1"></el-option>
@@ -28,7 +28,7 @@
           <el-option label="4-8小时" value="3"></el-option>
           <el-option label="8小时以上" value="4"></el-option>
         </el-select>
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item label="工号">
         <el-input v-model="form.workNo"></el-input>
       </el-form-item>
@@ -90,7 +90,11 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
-<!--        <el-button type="primary" @click="onSubmit">导出</el-button>-->
+        <el-button type="primary" @click="downloadFile">导出</el-button>
+        <el-button type="primary" @click="onSubmit1">查询1</el-button>
+        <el-button type="primary" @click="onSubmit2">查询2</el-button>
+        <el-button type="primary" @click="downloadFile1">导出1</el-button>
+        <el-button type="primary" @click="downloadFile2">导出2</el-button>
       </el-form-item>
     </el-form>
     <el-main>
@@ -181,7 +185,8 @@
 </template>
 
 <script>
-import { getWOList } from '@/api/admin'
+import { getWOList, getWOExcel, getAcctWOList, getTakeWOList, getAcctWOExcel, getTakeWOExcel } from '@/api/admin'
+import { saveAs } from 'file-saver'
 
 export default {
   data() {
@@ -272,6 +277,56 @@ export default {
         console.log(res)
         this.tableData = res.data
         this.loading = false
+      })
+    },
+    onSubmit1() {
+      console.log(this.form.time)
+      getAcctWOList(this.form.time).then(res => {
+        console.log(res)
+        this.tableData = res.data
+        this.loading = false
+      })
+    },
+    onSubmit2() {
+      console.log(this.form.duration)
+      getTakeWOList(this.form.duration).then(res => {
+        console.log(res)
+        this.tableData = res.data
+        this.loading = false
+      })
+    },
+    downloadFile() { // 点击导出按钮
+      const data = {
+        date1: this.form.date1,
+        date2: this.form.date2,
+        workNo: this.form.workNo,
+        ownBr: this.form.org,
+        acctPersonName: this.form.worker,
+        machineName: this.form.machine,
+        faultType: this.form.faultType,
+        faultId: this.form.area,
+        orderSts: this.form.sts,
+        changeTime: this.form.changeTime,
+        point: this.form.point
+      }
+      getWOExcel(data).then(resp => {
+        const fileName = '用户信息.xls'
+        const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
+        saveAs(blob, fileName)
+      })
+    },
+    downloadFile1() { // 点击导出按钮
+      getAcctWOExcel(this.form.time).then(resp => {
+        const fileName = '用户信息.xls'
+        const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
+        saveAs(blob, fileName)
+      })
+    },
+    downloadFile2() { // 点击导出按钮
+      getTakeWOExcel(this.form.duration).then(resp => {
+        const fileName = '用户信息.xls'
+        const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
+        saveAs(blob, fileName)
       })
     }
   }

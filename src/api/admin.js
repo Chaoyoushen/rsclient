@@ -16,6 +16,22 @@ export function getWOList(data) {
   })
 }
 
+export function getAcctWOList(data) {
+  return request({
+    url: '/admin/queryAcctTimeWOList',
+    method: 'post',
+    data
+  })
+}
+
+export function getTakeWOList(data) {
+  return request({
+    url: '/admin/queryTakeTimeWOList',
+    method: 'post',
+    data
+  })
+}
+
 export function initWOList() {
   return request({
     url: '/admin/initWOList',
@@ -81,6 +97,33 @@ export function queryOPList(data) {
   return request({
     url: '/operation/queryOPList',
     method: 'post',
+    data
+  })
+}
+
+export function getWOExcel(data) {
+  return request({
+    url: '/admin/getWOExcel',
+    method: 'post',
+    responseType: 'blob',
+    data
+  })
+}
+
+export function getAcctWOExcel(data) {
+  return request({
+    url: '/admin/getAcctWOExcel',
+    method: 'post',
+    responseType: 'blob',
+    data
+  })
+}
+
+export function getTakeWOExcel(data) {
+  return request({
+    url: '/admin/getTakeWOExcel',
+    method: 'post',
+    responseType: 'blob',
     data
   })
 }
