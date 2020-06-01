@@ -13,7 +13,7 @@
         </el-col>
       </el-form-item>
       <el-form-item label="接单时间">
-        <el-select v-model="form.time" placeholder="请选择时间">
+        <el-select v-model="form.time" placeholder="请选择时间" clearable>
           <el-option label="0.5小时内" value="0"></el-option>
           <el-option label="0.5-1小时" value="1"></el-option>
           <el-option label="1-2小时" value="2"></el-option>
@@ -21,7 +21,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="处理时长">
-        <el-select v-model="form.duration" placeholder="请选择活动区域">
+        <el-select v-model="form.duration" placeholder="请选择" clearable>
           <el-option label="1小时以内" value="0"></el-option>
           <el-option label="1-2小时" value="1"></el-option>
           <el-option label="2-4小时" value="2"></el-option>
@@ -60,7 +60,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="工单状态">
-        <el-select v-model="form.sts" placeholder="请选择时间" clearable>
+        <el-select v-model="form.sts" placeholder="请选择" clearable>
           <el-option label="待审批" value="0"></el-option>
           <el-option label="处理中" value="1"></el-option>
           <el-option label="已解决" value="2"></el-option>
@@ -71,14 +71,14 @@
         <el-input v-model="form.worker"></el-input>
       </el-form-item>
       <el-form-item label="转单次数">
-        <el-select v-model="form.changeTime" placeholder="请选择时间" clearable>
+        <el-select v-model="form.changeTime" placeholder="请选择" clearable>
           <el-option label="1次" value="1"></el-option>
           <el-option label="2次" value="2"></el-option>
           <el-option label="2次以上" value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="满意度评价">
-        <el-select v-model="form.point" placeholder="请选择时间" clearable>
+        <el-select v-model="form.point" placeholder="请选择" clearable>
           <el-option label="1星" value="1"></el-option>
           <el-option label="2星" value="2"></el-option>
           <el-option label="3星" value="3"></el-option>
@@ -91,12 +91,13 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="primary" @click="downloadFile">导出</el-button>
-        <el-button type="primary" @click="onSubmit1">查询1</el-button>
-        <el-button type="primary" @click="onSubmit2">查询2</el-button>
-        <el-button type="primary" @click="downloadFile1">导出1</el-button>
-        <el-button type="primary" @click="downloadFile2">导出2</el-button>
+        <el-button type="primary" @click="onSubmit1">基于接单时间查询</el-button>
+        <el-button type="primary" @click="onSubmit2">基于处理时间查询</el-button>
+        <el-button type="primary" @click="downloadFile1">基于接单时间导出</el-button>
+        <el-button type="primary" @click="downloadFile2">基于处理时间导出</el-button>
       </el-form-item>
     </el-form>
+    <div>共有{{woNumber}}工单</div>
     <el-main>
       <el-table
         v-loading="loading"
@@ -238,6 +239,7 @@ export default {
         }]
       },
       tableData: [],
+      woNumber: '',
       form: {
         sts: '',
         region: '',
@@ -276,6 +278,8 @@ export default {
       getWOList(data).then(res => {
         console.log(res)
         this.tableData = res.data
+        this.woNumber = res.data.length
+        console.log(this.woNumber)
         this.loading = false
       })
     },
@@ -285,6 +289,7 @@ export default {
         console.log(res)
         this.tableData = res.data
         this.loading = false
+        this.woNumber = res.data.length
       })
     },
     onSubmit2() {
@@ -293,6 +298,7 @@ export default {
         console.log(res)
         this.tableData = res.data
         this.loading = false
+        this.woNumber = res.data.length
       })
     },
     downloadFile() { // 点击导出按钮
@@ -310,21 +316,21 @@ export default {
         point: this.form.point
       }
       getWOExcel(data).then(resp => {
-        const fileName = '用户信息.xls'
+        const fileName = '工单信息.xls'
         const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
         saveAs(blob, fileName)
       })
     },
     downloadFile1() { // 点击导出按钮
       getAcctWOExcel(this.form.time).then(resp => {
-        const fileName = '用户信息.xls'
+        const fileName = '工单信息（接单时间）.xls'
         const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
         saveAs(blob, fileName)
       })
     },
     downloadFile2() { // 点击导出按钮
       getTakeWOExcel(this.form.duration).then(resp => {
-        const fileName = '用户信息.xls'
+        const fileName = '工单信息（处理时间）.xls'
         const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
         saveAs(blob, fileName)
       })
