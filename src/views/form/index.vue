@@ -315,7 +315,9 @@ export default {
         faultId: this.form.area,
         orderSts: this.form.sts,
         changeTime: this.form.changeTime,
-        point: this.form.point
+        point: this.form.point,
+        acctValue: this.form.time,
+        takeValue: this.form.duration
       }
       getWOExcel(data).then(resp => {
         const fileName = '工单信息.xls'

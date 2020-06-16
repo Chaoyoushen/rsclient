@@ -7,7 +7,7 @@
             <el-input v-model="condition.person" style="width: 75px" placeholder="联系人" />
           </el-form-item>
           <el-form-item label="工单状态">
-            <el-select v-model="condition.sts" style="width: 75px" placeholder="请选择">
+            <el-select v-model="condition.sts" style="width: 75px" placeholder="请选择" clearable>
               <el-option
                 v-for="item in types"
                 :key="item.value"
@@ -17,7 +17,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="故障区域">
-            <el-select v-model="condition.fault" placeholder="请选择" filterable>
+            <el-select v-model="condition.fault" placeholder="请选择" filterable clearable>
               <el-option
                 v-for="item in faults"
                 :key="item.value"
@@ -27,7 +27,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="网点">
-            <el-select v-model="condition.org" placeholder="请选择" filterable>
+            <el-select v-model="condition.org" placeholder="请选择" filterable clearable>
               <el-option
                 v-for="item in brs"
                 :key="item.value"
