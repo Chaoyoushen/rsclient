@@ -91,10 +91,10 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="primary" @click="downloadFile">导出</el-button>
-        <el-button type="primary" @click="onSubmit1">基于接单时间查询</el-button>
-        <el-button type="primary" @click="onSubmit2">基于处理时间查询</el-button>
-        <el-button type="primary" @click="downloadFile1">基于接单时间导出</el-button>
-        <el-button type="primary" @click="downloadFile2">基于处理时间导出</el-button>
+<!--        <el-button type="primary" @click="onSubmit1">基于接单时间查询</el-button>-->
+<!--        <el-button type="primary" @click="onSubmit2">基于处理时间查询</el-button>-->
+<!--        <el-button type="primary" @click="downloadFile1">基于接单时间导出</el-button>-->
+<!--        <el-button type="primary" @click="downloadFile2">基于处理时间导出</el-button>-->
       </el-form-item>
     </el-form>
     <div>共有{{woNumber}}工单</div>
