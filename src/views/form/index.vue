@@ -272,7 +272,9 @@ export default {
         faultId: this.form.area,
         orderSts: this.form.sts,
         changeTime: this.form.changeTime,
-        point: this.form.point
+        point: this.form.point,
+        acctValue: this.form.time,
+        takeValue: this.form.duration
       }
       console.log(data)
       getWOList(data).then(res => {
