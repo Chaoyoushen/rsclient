@@ -36,6 +36,16 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="预估时长">
+            <el-select v-model="condition.difFlag" placeholder="请选择" filterable clearable>
+              <el-option
+                v-for="item in difFlags"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
@@ -51,12 +61,12 @@
         <el-table
           v-loading="loading"
           :data="tableData"
-          style="width: 90%; margin-left: 5%"
+          style="width: 98%; margin-left: 1%"
         >
           <el-table-column
             prop="person"
             label="联系人"
-            width="180"
+            min-width="10%"
             header-align="center"
             align="center"
           />
@@ -65,12 +75,21 @@
             label="故障描述"
             header-align="center"
             align="center"
+            min-width="25%"
             show-overflow-tooltip
           />
           <el-table-column
             prop="sts"
             label="工单状态"
             header-align="center"
+            min-width="10%"
+            align="center"
+          />
+          <el-table-column
+            prop="difFlag"
+            label="技术评估时长"
+            header-align="center"
+            min-width="10%"
             align="center"
           />
           <el-table-column
@@ -78,16 +97,17 @@
             label="日期"
             width="180"
             header-align="center"
+            min-width="10%"
             align="center"
           />
           <el-table-column
             prop="worker"
             label="工程师"
-            width="180"
+            min-width="10%"
             header-align="center"
             align="center"
           />
-          <el-table-column label="操作" fixed="right" header-align="center" align="center">
+          <el-table-column label="操作" fixed="right" header-align="center" align="center" min-width="25%">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -221,7 +241,8 @@ export default {
         person: '',
         org: '',
         sts: '',
-        fault: ''
+        fault: '',
+        difFlag: ''
       },
       offerForm: {
         personId: '',
@@ -249,6 +270,7 @@ export default {
       offerOrderLoading: false,
       closeOrderLoading: false,
       types: [{ 'label': '未分派', 'value': '1' }, { 'label': '已分派', 'value': '2' }, { 'label': '已处理', 'value': '3' }, { 'label': '已关闭', 'value': '4' }],
+      difFlags: [{ 'label': '1-10分钟', 'value': '1' }, { 'label': '11-30分钟', 'value': '2' }, { 'label': '31-60分钟', 'value': '3' }, { 'label': '60分钟以上', 'value': '4' }, { 'label': '上门', 'value': '6' }],
       brs: [],
       faults: [],
       workers: [],
@@ -284,7 +306,8 @@ export default {
         org: this.condition.org,
         person: this.condition.person,
         sts: this.condition.sts,
-        faultId: this.condition.fault
+        faultId: this.condition.fault,
+        difFlag: this.condition.difFlag
       }
       getList(data).then(res => {
         console.log(res)

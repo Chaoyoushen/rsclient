@@ -7,7 +7,6 @@ import user from './modules/user'
 import admin from './modules/admin'
 import permission from './modules/permission'
 
-
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
