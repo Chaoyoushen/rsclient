@@ -181,6 +181,8 @@ export default {
       detailForm: {
         /* password: '',*/
         personId: '',
+        oldId: '',
+        oldName: '',
         orgId: '',
         orgName: ''/*,
         workNo: ''*/
@@ -397,6 +399,8 @@ export default {
       this.detailForm.orgName = scope.row.orgName
       // this.detailForm.workNo = scope.row.workNo
       this.detailForm.orgId = scope.row.orgId
+      this.detailForm.oldId = scope.row.orgId
+      this.detailForm.oldName = scope.row.orgName
       this.detailVisible = true
     },
     handleChange() {
