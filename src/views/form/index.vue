@@ -33,18 +33,26 @@
         <el-input v-model="form.workNo"></el-input>
       </el-form-item>
       <el-form-item label="机构名">
-        <el-input v-model="form.org"></el-input>
+        <el-select v-model="form.org" placeholder="请选择" filterable clearable>
+          <el-option
+            v-for="item in brs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="设备类型">
         <el-input v-model="form.machine"></el-input>
       </el-form-item>
       <el-form-item label="故障分类">
         <el-select v-model="form.faultType" placeholder="请选择" clearable>
-          <el-option label="网络问题" value="0"></el-option>
-          <el-option label="操作系统及驱动" value="1"></el-option>
-          <el-option label="硬件问题" value="2"></el-option>
-          <el-option label="应用软件" value="3"></el-option>
-          <el-option label="使用操作" value="4"></el-option>
+          <el-option
+            v-for="item in faults"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="故障区域">
@@ -61,10 +69,10 @@
       </el-form-item>
       <el-form-item label="工单状态">
         <el-select v-model="form.sts" placeholder="请选择" clearable>
-          <el-option label="待审批" value="0"></el-option>
-          <el-option label="处理中" value="1"></el-option>
-          <el-option label="已解决" value="2"></el-option>
-          <el-option label="已关闭" value="3"></el-option>
+          <el-option label="待分派" value="1"></el-option>
+          <el-option label="处理中" value="2"></el-option>
+          <el-option label="已解决" value="3"></el-option>
+          <el-option label="已关闭" value="4"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="处理人">
@@ -186,7 +194,7 @@
 </template>
 
 <script>
-import { getWOList, getWOExcel, getAcctWOList, getTakeWOList, getAcctWOExcel, getTakeWOExcel } from '@/api/admin'
+import { getWOList, getWOExcel, getAcctWOList, getTakeWOList, getAcctWOExcel, getTakeWOExcel, initWOList } from '@/api/admin'
 import { saveAs } from 'file-saver'
 
 export default {
@@ -239,6 +247,8 @@ export default {
         }]
       },
       tableData: [],
+      brs: [],
+      faults: [],
       woNumber: '',
       form: {
         sts: '',
@@ -258,6 +268,13 @@ export default {
         time: ''
       }
     }
+  },
+  created: function() {
+    initWOList().then(res => {
+      console.log(res)
+      this.brs = res.data.brs
+      this.faults = res.data.faults
+    })
   },
   methods: {
     onSubmit() {
