@@ -1,60 +1,78 @@
 <template>
   <div>
     <el-container>
-      <el-header style="text-align: right; font-size: 12px">
+      <el-header style="text-align: right; font-size: 12px" height="8%">
         <el-form :inline="true" :model="condition" style="margin-top: 12px">
-          <el-form-item label="联系人" style="text-align: center">
-            <el-input v-model="condition.person" style="width: 75px" placeholder="联系人" />
-          </el-form-item>
-          <el-form-item label="工单状态">
-            <el-select v-model="condition.sts" style="width: 75px" placeholder="请选择" clearable>
-              <el-option
-                v-for="item in types"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="故障区域">
-            <el-select v-model="condition.fault" placeholder="请选择" filterable clearable>
-              <el-option
-                v-for="item in faults"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="网点">
-            <el-select v-model="condition.org" placeholder="请选择" filterable clearable>
-              <el-option
-                v-for="item in brs"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="预估时长">
-            <el-select v-model="condition.difFlag" placeholder="请选择" filterable clearable>
-              <el-option
-                v-for="item in difFlags"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="queryBadWOList">查询不满意工单</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="queryChangeWOList">查询转单工单</el-button>
-          </el-form-item>
+          <el-row type="flex" justify="space-between">
+            <el-col :span="1.5">
+              <el-form-item label="联系人">
+                <el-input v-model="condition.person" placeholder="联系人" style="width: 75px"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2.5">
+              <el-form-item label="工单状态">
+                <el-select v-model="condition.sts" placeholder="请选择" clearable style="width: 100px">
+                  <el-option
+                    v-for="item in types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2.5">
+              <el-form-item label="故障区域">
+                <el-select v-model="condition.fault" placeholder="请选择" filterable clearable style="width: 150px">
+                  <el-option
+                    v-for="item in faults"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2.5">
+              <el-form-item label="网点">
+                <el-select v-model="condition.org" placeholder="请选择" filterable clearable style="width: 150px">
+                  <el-option
+                    v-for="item in brs"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2.5">
+              <el-form-item label="预估时长">
+                <el-select v-model="condition.difFlag" placeholder="请选择" filterable clearable style="width: 150px">
+                  <el-option
+                    v-for="item in difFlags"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="1.5">
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+              <el-form-item>
+                <el-button type="primary" @click="queryBadWOList" style="width: 110px">不满意工单</el-button>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+              <el-form-item>
+                <el-button type="primary" @click="queryChangeWOList" style="width: 100px">转单工单</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </el-header>
       <el-main>
