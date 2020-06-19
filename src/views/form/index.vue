@@ -30,10 +30,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="工号">
-        <el-input v-model="form.workNo"></el-input>
+        <el-input v-model="form.workNo" clearable></el-input>
       </el-form-item>
       <el-form-item label="机构名">
         <el-select v-model="form.org" placeholder="请选择" filterable clearable>
+          <el-option label="成都区域" value="0"></el-option>
+          <el-option label="省辖行" value="1"></el-option>
           <el-option
             v-for="item in brs"
             :key="item.value"
@@ -43,28 +45,25 @@
         </el-select>
       </el-form-item>
       <el-form-item label="设备类型">
-        <el-input v-model="form.machine"></el-input>
+        <el-input v-model="form.machine" clearable></el-input>
       </el-form-item>
       <el-form-item label="故障分类">
         <el-select v-model="form.faultType" placeholder="请选择" clearable>
+          <el-option label="网络问题" value="0"></el-option>
+          <el-option label="操作系统及驱动" value="1"></el-option>
+          <el-option label="硬件问题" value="2"></el-option>
+          <el-option label="应用软件" value="3"></el-option>
+          <el-option label="使用操作" value="4"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="故障区域">
+        <el-select v-model="form.area" placeholder="请选择故障区域" clearable>
           <el-option
             v-for="item in faults"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="故障区域">
-        <el-select v-model="form.area" placeholder="请选择故障区域" clearable>
-          <el-option label="办公区（1台）" value="F0001"></el-option>
-          <el-option label="办公区（多台）" value="F0002"></el-option>
-          <el-option label="高柜（1台）" value="F0003"></el-option>
-          <el-option label="高柜（多台）" value="F0004"></el-option>
-          <el-option label="厅堂客户经理（1台）" value="F0005"></el-option>
-          <el-option label="厅堂客户经理（多台）" value="F0006"></el-option>
-          <el-option label="厅堂智能服务区和其他自助机具" value="F0007"></el-option>
-          <el-option label="移动设备" value="F0008"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="工单状态">
@@ -76,7 +75,14 @@
         </el-select>
       </el-form-item>
       <el-form-item label="处理人">
-        <el-input v-model="form.worker"></el-input>
+        <el-select v-model="form.worker" placeholder="请选择处理工程师" filterable clearable>
+        <el-option
+          v-for="item in workers"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+        </el-select>
       </el-form-item>
       <el-form-item label="转单次数">
         <el-select v-model="form.changeTime" placeholder="请选择" clearable>
@@ -96,6 +102,16 @@
           <el-option label="3星以下" value="7"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="技术难度评估">
+        <el-select v-model="form.difFlag" placeholder="请选择技术难度评估时间" clearable>
+          <el-option
+            v-for="item in difFlags"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="primary" @click="downloadFile">导出</el-button>
@@ -112,6 +128,20 @@
         :data="tableData"
         style="width: 90%; margin-left: 5%"
       >
+        <el-table-column label="操作" fixed="right" header-align="center" align="center" min-width="25%">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleDetailInfo(scope)"
+            >详情</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleOPInfo(scope)"
+            >流程</el-button>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="person"
           label="联系人"
@@ -188,13 +218,82 @@
           header-align="center"
           align="center"
         />
+        <el-table-column
+          prop="difFlag"
+          label="技术难度评估"
+          width="180"
+          header-align="center"
+          align="center"
+        />
       </el-table>
     </el-main>
+    <el-dialog
+      title="工单详情"
+      :visible.sync="detailVisible"
+      width="60%"
+      center
+    >
+      <span>
+        <el-form :model="detailForm" label-width="80px">
+          <el-form-item label="联系人">
+            <el-input v-model="detailForm.person" style="width: 150px" />
+          </el-form-item>
+          <el-form-item label="联系电话">
+            <el-input v-model="detailForm.phone" style="width: 250px" />
+          </el-form-item>
+          <el-form-item label="网点名称">
+            <el-input v-model="detailForm.br" style="width: 250px" disabled />
+          </el-form-item>
+          <el-form-item label="故障区域">
+            <el-input v-model="detailForm.fault" style="width: 250px" disabled />
+          </el-form-item>
+          <el-form-item label="故障类型">
+            <el-input v-model="detailForm.faultType" style="width: 250px" disabled />
+          </el-form-item>
+          <el-form-item label="设备类型">
+            <el-input v-model="detailForm.machine" style="width: 350px" disabled />
+          </el-form-item>
+          <el-form-item label="故障描述">
+            <el-input v-model="detailForm.desc" style="width: 80%" type="textarea" rows="5" disabled />
+          </el-form-item>
+          <div v-if="detailForm.images.length > 0">
+            <el-form-item label="图片">
+              <el-image
+                v-for="item in detailForm.images"
+                :key="item"
+                style="width: 100px; height: 100px; margin-right: 20px"
+                :src="item"
+                :preview-src-list="detailForm.images"
+                fit="contain"
+              />
+            </el-form-item>
+          </div>
+        </el-form>
+      </span>
+    </el-dialog>
+    <el-dialog v-loading="opLoading" title="流程跟踪" :visible.sync="opVisible" center>
+      <el-timeline :reverse="false">
+        <el-timeline-item
+          v-for="(op, index) in opList"
+          :key="index"
+          :timestamp="timestampToTime(op.time)"
+          placement="top"
+        >
+          <el-card>
+            <h4>{{ '操作意见:' + op.operationInfo }}</h4>
+            <p>{{ '操作人:' + op.person }}</p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeOPDialog">关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getWOList, getWOExcel, getAcctWOList, getTakeWOList, getAcctWOExcel, getTakeWOExcel, initWOList } from '@/api/admin'
+import { getWOList, getWOExcel, getAcctWOList, getTakeWOList, getAcctWOExcel, getTakeWOExcel, initWOList, getWOInfo, queryOPList } from '@/api/admin'
 import { saveAs } from 'file-saver'
 
 export default {
@@ -249,7 +348,25 @@ export default {
       tableData: [],
       brs: [],
       faults: [],
+      workers: [],
       woNumber: '',
+      opList: [],
+      loading: false,
+      opLoading: false,
+      detailVisible: false,
+      opVisible: false,
+      closeWOVisible: false,
+      detailForm: {
+        person: '',
+        phone: '',
+        fault: '',
+        faultType: '',
+        machine: '',
+        desc: '',
+        br: '',
+        images: []
+      },
+      difFlags: [{ 'label': '1-10分钟', 'value': '1' }, { 'label': '11-30分钟', 'value': '2' }, { 'label': '31-60分钟', 'value': '3' }, { 'label': '60分钟以上', 'value': '4' }, { 'label': '上门', 'value': '6' }],
       form: {
         sts: '',
         region: '',
@@ -265,7 +382,8 @@ export default {
         type: [],
         point: '',
         changeTime: '',
-        time: ''
+        time: '',
+        difFlag: ''
       }
     }
   },
@@ -274,6 +392,8 @@ export default {
       console.log(res)
       this.brs = res.data.brs
       this.faults = res.data.faults
+      this.workers = res.data.workers
+      console.log(this.workers)
     })
   },
   methods: {
@@ -283,7 +403,7 @@ export default {
         date2: this.form.date2,
         workNo: this.form.workNo,
         ownBr: this.form.org,
-        acctPersonName: this.form.worker,
+        acctPerson: this.form.worker,
         machineName: this.form.machine,
         faultType: this.form.faultType,
         faultId: this.form.area,
@@ -291,7 +411,8 @@ export default {
         changeTime: this.form.changeTime,
         point: this.form.point,
         acctValue: this.form.time,
-        takeValue: this.form.duration
+        takeValue: this.form.duration,
+        difFlag: this.form.difFlag
       }
       console.log(data)
       getWOList(data).then(res => {
@@ -326,7 +447,7 @@ export default {
         date2: this.form.date2,
         workNo: this.form.workNo,
         ownBr: this.form.org,
-        acctPersonName: this.form.worker,
+        acctPerson: this.form.worker,
         machineName: this.form.machine,
         faultType: this.form.faultType,
         faultId: this.form.area,
@@ -334,7 +455,8 @@ export default {
         changeTime: this.form.changeTime,
         point: this.form.point,
         acctValue: this.form.time,
-        takeValue: this.form.duration
+        takeValue: this.form.duration,
+        difFlag: this.form.difFlag
       }
       getWOExcel(data).then(resp => {
         const fileName = '工单信息.xls'
@@ -355,6 +477,57 @@ export default {
         const blob = new Blob([resp], { type: 'application/vnd.ms-excel' })
         saveAs(blob, fileName)
       })
+    },
+    handleOPInfo(scope) {
+      console.log(scope.row.orderId)
+      queryOPList(scope.row.orderId).then(res => {
+        console.log(res)
+        this.opList = res.data
+        this.opForm.orderId = scope.row.orderId
+        this.opVisible = true
+      })
+    },
+    closeOPDialog() {
+      this.opForm.orderId = ''
+      this.opList = []
+      this.opVisible = false
+    },
+    handleDetailInfo(scope) {
+      console.log(scope.row.orderId)
+      getWOInfo(scope.row.orderId).then(res => {
+        console.log(res)
+        this.detailForm.person = res.data.person
+        this.detailForm.fault = res.data.fault
+        this.detailForm.machine = res.data.machine
+        this.detailForm.phone = res.data.phone
+        this.detailForm.faultType = res.data.faultType
+        this.detailForm.desc = res.data.description
+        const tmp = res.data.images.split(';')
+        if (tmp[0] !== '') {
+          const urls = []
+          for (const index in tmp) {
+            const url = tmp[index]
+            urls.push(url)
+          }
+          this.detailForm.images = urls
+          console.log(tmp.length)
+          console.log(this.detailForm.images)
+        } else {
+          this.detailForm.images = []
+        }
+        this.detailForm.br = res.data.br
+        this.detailVisible = true
+      })
+    },
+    timestampToTime(timestamp) {
+      const date = new Date(parseInt(timestamp))
+      const Y = date.getFullYear() + '-'
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+      const D = date.getDate() + ' '
+      const h = date.getHours() + ':'
+      const m = date.getMinutes() + ':'
+      const s = date.getSeconds()
+      return Y + M + D + h + m + s
     }
   }
 }
