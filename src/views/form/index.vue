@@ -128,7 +128,7 @@
         :data="tableData"
         style="width: 90%; margin-left: 5%"
       >
-        <el-table-column label="操作" fixed="right" header-align="center" align="center" min-width="25%">
+        <el-table-column label="操作" fixed="left" header-align="center" align="center" min-width="100%">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -356,6 +356,11 @@ export default {
       detailVisible: false,
       opVisible: false,
       closeWOVisible: false,
+      opForm: {
+        operationInfo: '',
+        type: '3',
+        orderId: ''
+      },
       detailForm: {
         person: '',
         phone: '',
