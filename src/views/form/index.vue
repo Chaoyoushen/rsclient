@@ -68,9 +68,9 @@
       </el-form-item>
       <el-form-item label="工单状态">
         <el-select v-model="form.sts" placeholder="请选择" clearable>
-          <el-option label="待分派" value="1"></el-option>
-          <el-option label="处理中" value="2"></el-option>
-          <el-option label="已解决" value="3"></el-option>
+          <el-option label="待审批" value="1"></el-option>
+          <el-option label="已分派" value="2"></el-option>
+          <el-option label="已处理" value="3"></el-option>
           <el-option label="已关闭" value="4"></el-option>
         </el-select>
       </el-form-item>
