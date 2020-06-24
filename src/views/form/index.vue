@@ -3,39 +3,39 @@
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="时间段">
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择开始日期"  v-model="form.date1" style="width: 100%;" :picker-options="pickerOptions" value-format="timestamp">
+          <el-date-picker v-model="form.date1" type="date" placeholder="选择开始日期" style="width: 100%;" :picker-options="pickerOptions" value-format="timestamp">
             ></el-date-picker>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择结束日期" v-model="form.date2" style="width: 100%;" :picker-options="pickerOptions" value-format="timestamp">
+          <el-date-picker v-model="form.date2" type="date" placeholder="选择结束日期" style="width: 100%;" :picker-options="pickerOptions" value-format="timestamp">
             ></el-date-picker>
         </el-col>
       </el-form-item>
       <el-form-item label="接单时间">
         <el-select v-model="form.time" placeholder="请选择时间" clearable>
-          <el-option label="0.5小时内" value="0"></el-option>
-          <el-option label="0.5-1小时" value="1"></el-option>
-          <el-option label="1-2小时" value="2"></el-option>
-          <el-option label="2小时以上" value="3"></el-option>
+          <el-option label="0.5小时内" value="0" />
+          <el-option label="0.5-1小时" value="1" />
+          <el-option label="1-2小时" value="2" />
+          <el-option label="2小时以上" value="3" />
         </el-select>
       </el-form-item>
       <el-form-item label="处理时长">
         <el-select v-model="form.duration" placeholder="请选择" clearable>
-          <el-option label="1小时以内" value="0"></el-option>
-          <el-option label="1-2小时" value="1"></el-option>
-          <el-option label="2-4小时" value="2"></el-option>
-          <el-option label="4-8小时" value="3"></el-option>
-          <el-option label="8小时以上" value="4"></el-option>
+          <el-option label="1小时以内" value="0" />
+          <el-option label="1-2小时" value="1" />
+          <el-option label="2-4小时" value="2" />
+          <el-option label="4-8小时" value="3" />
+          <el-option label="8小时以上" value="4" />
         </el-select>
       </el-form-item>
       <el-form-item label="工号">
-        <el-input v-model="form.workNo" clearable></el-input>
+        <el-input v-model="form.workNo" clearable />
       </el-form-item>
       <el-form-item label="机构名">
         <el-select v-model="form.org" placeholder="请选择" filterable clearable>
-          <el-option label="成都区域" value="0"></el-option>
-          <el-option label="省辖行" value="1"></el-option>
+          <el-option label="成都区域" value="0" />
+          <el-option label="省辖行" value="1" />
           <el-option
             v-for="item in brs"
             :key="item.value"
@@ -45,15 +45,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="设备类型">
-        <el-input v-model="form.machine" clearable></el-input>
+        <el-input v-model="form.machine" clearable />
       </el-form-item>
       <el-form-item label="故障分类">
         <el-select v-model="form.faultType" placeholder="请选择" clearable>
-          <el-option label="网络问题" value="0"></el-option>
-          <el-option label="操作系统及驱动" value="1"></el-option>
-          <el-option label="硬件问题" value="2"></el-option>
-          <el-option label="应用软件" value="3"></el-option>
-          <el-option label="使用操作" value="4"></el-option>
+          <el-option label="网络问题" value="0" />
+          <el-option label="操作系统及驱动" value="1" />
+          <el-option label="硬件问题" value="2" />
+          <el-option label="应用软件" value="3" />
+          <el-option label="使用操作" value="4" />
         </el-select>
       </el-form-item>
       <el-form-item label="故障区域">
@@ -68,38 +68,38 @@
       </el-form-item>
       <el-form-item label="工单状态">
         <el-select v-model="form.sts" placeholder="请选择" clearable>
-          <el-option label="待审批" value="1"></el-option>
-          <el-option label="已分派" value="2"></el-option>
-          <el-option label="已处理" value="3"></el-option>
-          <el-option label="已关闭" value="4"></el-option>
+          <el-option label="待审批" value="1" />
+          <el-option label="已分派" value="2" />
+          <el-option label="已处理" value="3" />
+          <el-option label="已关闭" value="4" />
         </el-select>
       </el-form-item>
       <el-form-item label="处理人">
         <el-select v-model="form.worker" placeholder="请选择处理工程师" filterable clearable>
-        <el-option
-          v-for="item in workers"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+          <el-option
+            v-for="item in workers"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="转单次数">
         <el-select v-model="form.changeTime" placeholder="请选择" clearable>
-          <el-option label="1次" value="1"></el-option>
-          <el-option label="2次" value="2"></el-option>
-          <el-option label="2次以上" value="3"></el-option>
+          <el-option label="1次" value="1" />
+          <el-option label="2次" value="2" />
+          <el-option label="2次以上" value="3" />
         </el-select>
       </el-form-item>
       <el-form-item label="满意度评价">
         <el-select v-model="form.point" placeholder="请选择" clearable>
-          <el-option label="1星" value="1"></el-option>
-          <el-option label="2星" value="2"></el-option>
-          <el-option label="3星" value="3"></el-option>
-          <el-option label="4星" value="4"></el-option>
-          <el-option label="5星" value="5"></el-option>
-          <el-option label="3星及以上" value="6"></el-option>
-          <el-option label="3星以下" value="7"></el-option>
+          <el-option label="1星" value="1" />
+          <el-option label="2星" value="2" />
+          <el-option label="3星" value="3" />
+          <el-option label="4星" value="4" />
+          <el-option label="5星" value="5" />
+          <el-option label="3星及以上" value="6" />
+          <el-option label="3星以下" value="7" />
         </el-select>
       </el-form-item>
       <el-form-item label="技术难度评估">
@@ -115,20 +115,21 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="primary" @click="downloadFile">导出</el-button>
-<!--        <el-button type="primary" @click="onSubmit1">基于接单时间查询</el-button>-->
-<!--        <el-button type="primary" @click="onSubmit2">基于处理时间查询</el-button>-->
-<!--        <el-button type="primary" @click="downloadFile1">基于接单时间导出</el-button>-->
-<!--        <el-button type="primary" @click="downloadFile2">基于处理时间导出</el-button>-->
+        <!--        <el-button type="primary" @click="onSubmit1">基于接单时间查询</el-button>-->
+        <!--        <el-button type="primary" @click="onSubmit2">基于处理时间查询</el-button>-->
+        <!--        <el-button type="primary" @click="downloadFile1">基于接单时间导出</el-button>-->
+        <!--        <el-button type="primary" @click="downloadFile2">基于处理时间导出</el-button>-->
       </el-form-item>
     </el-form>
-    <div>共有{{woNumber}}工单</div>
+    <div>共有{{ woNumber }}工单</div>
     <el-main>
       <el-table
         v-loading="loading"
-        :data="tableData"
+        :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
         style="width: 90%; margin-left: 5%"
+        ref="tableList"
       >
-        <el-table-column label="操作" fixed="left" header-align="center" align="center" min-width="100%">
+        <el-table-column label="操作" fixed="left" header-align="center" align="center" min-width="200%">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -226,6 +227,17 @@
           align="center"
         />
       </el-table>
+      <div class="tabListPage">
+        <el-pagination
+          :current-page="currentPage"
+          :page-sizes="pageSizes"
+          :page-size="PageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </el-main>
     <el-dialog
       title="工单详情"
@@ -350,6 +362,13 @@ export default {
       faults: [],
       workers: [],
       woNumber: '',
+      currentPage: 1,
+      // 总条数，根据接口获取数据长度(注意：这里不能为空)
+      totalCount: 1,
+      // 个数选择器（可修改）
+      pageSizes: [10, 20, 30, 40],
+      // 默认每页显示的条数（可修改）
+      PageSize: 10,
       opList: [],
       loading: false,
       opLoading: false,
@@ -424,9 +443,20 @@ export default {
         console.log(res)
         this.tableData = res.data
         this.woNumber = res.data.length
+        this.totalCount = res.data.length
         console.log(this.woNumber)
         this.loading = false
       })
+    },
+    handleSizeChange(val) {
+      this.PageSize = val
+      // 注意：在改变每页显示的条数时，要将页码显示到第一页
+      this.currentPage = 1
+    },
+    // 显示第几页
+    handleCurrentChange(val) {
+      // 改变默认的页数
+      this.currentPage = val
     },
     onSubmit1() {
       console.log(this.form.time)
@@ -542,5 +572,6 @@ export default {
 .line{
   text-align: center;
 }
+
 </style>
 
